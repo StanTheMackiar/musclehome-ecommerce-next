@@ -1,0 +1,48 @@
+{
+    "ui": {
+      "shop_layout": {
+          "side_menu": {
+            "categories":  {
+              "men": { "name": "Men", "path": "/category/men" },
+              "women": { "name": "Women", "path": "/category/women" },
+              "kids": { "name": "Kids", "path": "/category/kids'"}
+            },
+            "admin": {
+              "products": { "name": "Products", "path": "/category/men" },
+              "orders": { "name": "Orders", "path": "/category/women" },
+              "users": { "name": "Users", "path": "/category/kids'"}
+            },
+            "account": {
+              "profile": { "name": "Profile", "path": "/category/men" },
+              "orders": { "name": "Orders", "path": "/category/men" },
+              "login": { "name": "Log in", "path": "/category/women" },
+              "logout": { "name": "Log out", "path": "/category/kids'"}
+            }
+          }
+      }
+    },
+    "home": {
+      "seo": {
+        "title": "MuscleHome Store - Welcome",
+        "description": "Welcome to the official MuscleHome page, here you will find all kinds of services related to training and physical conditioning at home, get results from the comfort of your home."
+      } ,
+      "page_content": {
+        "title": "Welcome to MuscleHome official website",
+        "subtitle": "All products",
+        "message": "Your home is your own gym, let nothing stop you! 💪"
+      }
+    },
+    "error404": {
+        "seo": {  
+          "title": "Page not found",
+          "description": "The requested page don't exist."
+        },
+        "page_content": {
+          "title": "404 :(",
+          "description": "The requested page don't exist."
+        }
+      
+    }
+  }
+  
+  
