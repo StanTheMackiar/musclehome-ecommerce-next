@@ -1,6 +1,6 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useState } from 'react';
 
-import { Grid, Card, CardActionArea, CardMedia, Box, Typography } from '@mui/material'
+import { Grid, Card, CardActionArea, CardMedia, Box, Typography, Chip } from '@mui/material'
 import { IProduct } from '../../interfaces/products';
 import Link from 'next/link';
 
@@ -11,37 +11,40 @@ interface Props {
 
 export const ProductCard:FC<Props> = ({ product }) => {
 
-    const [isHovered, setIsHovered] = useState(false);
-
-    const productImage = useMemo(() => {
-        return isHovered
-            ? `products/${ product.images[1] }`
-            : `products/${ product.images[0] }`
-    }, [isHovered])
+    const [isImageLoaded, setIsImageLoaded] = useState(false);
 
 
   return (
-    <Grid 
-        item
-        xs={6} 
-        sm={4}
-        onMouseEnter={ () => setIsHovered(true) }
-        onMouseLeave={ () => setIsHovered(false) }
-    >
+    <Grid item xs={6} md={4} lg={3}>
         <Card>
             <Link href={`/product/${product.slug}`}>
+
                 <CardActionArea>
+
+                    {
+                        product.inStock === 0 && (
+                            <Chip 
+                                color='primary'
+                                size='small'
+                                label="No disponible"
+                                sx={{ position: 'absolute', zIndex: 99, top: '10px', left: '10px'}}
+                            />
+                        )
+                    }
+
                     <CardMedia 
                         component='img'
                         className='fadeIn'
-                        image={ productImage }
+                        image={ `/products/${ product.images[0] }` }
                         alt={ product.title }
+                        onLoad={ () => setIsImageLoaded(true) }
                     />
                 </CardActionArea>
+
             </Link>
         </Card>
 
-        <Box sx={{ mt: 1}} className='fadeIn'>
+        <Box sx={{ mt: 1, display: isImageLoaded ? 'block' : 'none'}} className='fadeIn'>
             <Typography textAlign='center'  fontWeight={700}>{ product.title }</Typography>
             <Typography textAlign='center' fontWeight={500}>{ `$${product.price}` }</Typography>
         </Box>

@@ -35,7 +35,7 @@ const productSchema = new Schema({
     timestamps: true
 });
 
-// Indice de busqueda
+// Indice de busqueda 
 productSchema.index({ title: 'text', tags: 'text' });
 
 

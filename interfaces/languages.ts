@@ -19,72 +19,25 @@ export interface SideMenu {
 }
 
 export interface Categories {
-  men: Men
-  women: Women
-  kids: Kids
-}
-
-export interface Men {
-  name: string
-  path: string
-}
-
-export interface Women {
-  name: string
-  path: string
-}
-
-export interface Kids {
-  name: string
-  path: string
+  subheader: string
+  men: string
+  women: string
+  kids: string
 }
 
 export interface Admin {
-  products: Products
-  orders: Orders
-  users: Users
-}
-
-export interface Products {
-  name: string
-  path: string
-}
-
-export interface Orders {
-  name: string
-  path: string
-}
-
-export interface Users {
-  name: string
-  path: string
+  subheader: string
+  products: string
+  orders: string
+  users: string
 }
 
 export interface Account {
-  profile: Profile
-  orders: Orders2
-  login: Login
-  logout: Logout
-}
-
-export interface Profile {
-  name: string
-  path: string
-}
-
-export interface Orders2 {
-  name: string
-  path: string
-}
-
-export interface Login {
-  name: string
-  path: string
-}
-
-export interface Logout {
-  name: string
-  path: string
+  subheader: string
+  profile: string
+  orders: string
+  login: string
+  logout: string
 }
 
 export interface Home {
@@ -98,9 +51,9 @@ export interface Seo {
 }
 
 export interface PageContent {
-  title: string,
-  subtitle: string,
-  message: string,
+  title: string
+  subtitle: string
+  message: string
 }
 
 export interface Error404 {

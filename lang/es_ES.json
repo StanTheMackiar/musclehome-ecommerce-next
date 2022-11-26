@@ -3,20 +3,23 @@
     "shop_layout": {
       "side_menu": {
         "categories":  {
-          "men": { "name": "Hombres", "path": "/category/men" },
-          "women": { "name": "Mujeres", "path": "/category/women" },
-          "kids": { "name": "Niños", "path": "/category/kids'"}
+          "subheader": "Categorías",
+          "men": "Hombres",
+          "women": "Mujeres",
+          "kids": "Niños"
         },
         "admin": {
-          "products": { "name": "Productos", "path": "/category/men" },
-          "orders": { "name": "Ordenes", "path": "/category/women" },
-          "users": { "name": "Usuarios", "path": "/category/kids'"}
+          "subheader": "Panel de administración",
+          "products": "Productos",
+          "orders": "Ordenes",
+          "users": "Usuarios"
         },
         "account": {
-          "profile": { "name": "Perfiles", "path": "/category/men" },
-          "orders": { "name": "Ordenes", "path": "/category/men" },
-          "login": { "name": "Ingresar", "path": "/category/women" },
-          "logout": { "name": "Salir", "path": "/category/kids'"}
+          "subheader": "Cuenta",
+          "profile": "Perfiles", 
+          "orders": "Ordenes",
+          "login": "Ingresar",
+          "logout": "Salir"
         }
       }
   }

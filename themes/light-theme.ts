@@ -66,11 +66,11 @@ export const lightTheme = createTheme({
         variant: 'contained',
         size: 'small',
         disableElevation: true,
-        color: 'info'
+        color: 'info',
       },
       styleOverrides: {
         root: {
-          margin: '1 2',
+          margin: '1px 2px',
           textTransform: 'none',
           boxShadow: 'none',
           borderRadius: 5,

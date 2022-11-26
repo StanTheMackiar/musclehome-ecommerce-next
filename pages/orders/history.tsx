@@ -44,7 +44,7 @@ const rows = [
     { id: 1, paid: true, fullName: 'Stanly Calle' },
     { id: 2, paid: false, fullName: 'Juanita Arango' },
     { id: 3, paid: true, fullName: 'Juan Mendoza' },
-    { id: 4, paid: false, ofullName: 'Ruben Calle' },
+    { id: 4, paid: false, fullName: 'Ruben Calle' },
     { id: 5, paid: true, fullName: 'Natalia Herrera' },
 
 ]
