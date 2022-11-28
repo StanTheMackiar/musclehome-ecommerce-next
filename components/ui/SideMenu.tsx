@@ -2,17 +2,19 @@ import { useContext, useState } from 'react';
 import { useRouter } from "next/router";
 
 import { LangContext } from '../../context/lang/LangContext';
-import { UIContext } from "../../context";
+import { AuthContext, UIContext } from "../../context";
 
 
-import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
+import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Typography } from '@mui/material';
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, 
 LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 
 import { ChangeLanguage } from './';
 
+
 export const SideMenu = () => {
 
+    const { isLoggedIn, user } = useContext(AuthContext)
     const { lang } = useContext(LangContext);
     const { ui: {shop_layout: {side_menu}} } = lang;
     
@@ -45,6 +47,11 @@ export const SideMenu = () => {
         <Box sx={{ width: {xs: 250, sm: 300, md: 350}, p: '2rem 1rem', }}>
             
             <List>
+
+                <ListItem>
+                    <Typography variant='subtitle1'>{ isLoggedIn ? `Hola, ${ user?.name }` : 'Invitado'}</Typography>
+
+                </ListItem>
 
                 <ListItem sx={{display: {xs: 'flex', md: 'none'}}}>
                     <Input

@@ -11,6 +11,7 @@ type Data =
     user: {
         email: string,
         name: string,
+        lastname: string,
         role: string,
     }
 }
@@ -44,9 +45,9 @@ const loginUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(400).json({ message: 'email or password do not valid - PASS' })
     }
 
-    const { role, name, _id } = dbUser
+    const { role, name, lastname, _id } = dbUser
 
-    const token = jwt.signToken( _id, email );
+    const token = jwt.createSignToken( _id, email );
 
     return res.status(200).json({
         token,
@@ -54,6 +55,7 @@ const loginUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
             email,
             role,
             name,
+            lastname,
         }
     })
 

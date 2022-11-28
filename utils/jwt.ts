@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 
-export const signToken = ( _id: string, email:string ) => {
+export const createSignToken = ( _id: string, email:string ) => {
 
     if ( !process.env.JWT_SECRET_SEED ) {
         throw new Error ('Do not have Jason Web Token seed, check enviroment variables')

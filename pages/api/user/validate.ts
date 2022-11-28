@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { db } from '../../../database'
 import { User } from '../../../models'
-import bcrypt from 'bcryptjs';
 import { jwt } from '../../../utils';
 
 type Data = 
@@ -11,6 +10,7 @@ type Data =
     user: {
         email: string,
         name: string,
+        lastname: string,
         role: string,
     }
 }
@@ -43,8 +43,6 @@ const checkToken = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
         })
     }
 
-
-
     await db.connect();
     const dbUser = await User.findById( userId ).lean();
     await db.disconnect();
@@ -53,14 +51,15 @@ const checkToken = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
         return res.status(400).json({ message: 'ID user do not exist' })
     }
 
-    const { _id, email, role, name } = dbUser;
+    const { _id, email, role, name, lastname } = dbUser;
 
     return res.status(200).json({
-        token: jwt.signToken( _id, email ),
+        token: jwt.createSignToken( _id, email ),
         user: {
             email,
             role,
             name,
+            lastname,
         }
     })
 

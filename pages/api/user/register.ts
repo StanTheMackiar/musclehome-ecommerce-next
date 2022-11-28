@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { db } from '../../../database'
 import { User } from '../../../models'
 import bcrypt from 'bcryptjs';
-import { jwt, validations } from '../../../utils';
+import { jwt, utils, validations } from '../../../utils';
 
 type Data = 
 | { message: string }
@@ -11,6 +11,7 @@ type Data =
     user: {
         email: string,
         name: string,
+        lastname: string,
         role: string,
     }
 }
@@ -30,25 +31,48 @@ export default function handler(req:NextApiRequest, res: NextApiResponse<Data>) 
 
 const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
-    const { email = '', password = '', name= '' } = req.body as { email:string, password: string, name: string };
+    let { name = '', lastname = '', email = '', password = '' } = req.body as { email: string, password: string, name: string, lastname: string };
+
+    console.log({name})
+
+    // Formateando informacion
+
+    name = utils.capitalize(name).trim();
+    lastname = utils.capitalize(lastname).trim();
+    email = email.toLowerCase().trim();
+    
 
     // Validacion de datos
 
+    
     if ( password.length < 6 ) {
         return res.status(400).json({
-            message: 'Password should have 6 caracters or more'
+            message: 'La contraseña debe tener 6 o más caracterse'
         })
     };
 
-    if ( name.length < 2 ) {
+    // if ( !validations.isValidPassword( password ) ) {
+    //     return res.status(400).json({
+    //         message: 'Password is not valid'
+    //     })
+    // };
+
+    if ( !validations.isValidName( name )) {
         return res.status(400).json({
-            message: 'Name should have 2 caracters or more'
+            message: 'El nombre introducido no es válido'
         })
-    };
+    }
+
+    if ( !validations.isValidName( lastname )) {
+        return res.status(400).json({
+            message: 'El apellido introducido no es válido'
+        })
+    }
+
 
     if ( !validations.isValidEmail( email )) {
         return res.status(400).json({
-            message: 'Email is not valid'
+            message: 'El correo no tiene un formato adecuado'
         })
     };
 
@@ -58,7 +82,7 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
     
     if ( dbUser ) {
         return res.status(400).json({
-            message: 'This email is already registered'
+            message: 'Este usuario ya ha sido registrado'
         })
     }
 
@@ -67,6 +91,7 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
         password: bcrypt.hashSync( password ),
         role: 'client',
         name,
+        lastname,
     });
 
     try {
@@ -82,7 +107,7 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     const { _id, role } = newUser;
 
-    const token = jwt.signToken( _id, email );
+    const token = jwt.createSignToken( _id, email );
 
     return res.status(200).json({
         token,
@@ -90,6 +115,7 @@ const registerUser = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
             email,
             role,
             name,
+            lastname,
         }
     })
 

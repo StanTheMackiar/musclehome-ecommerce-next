@@ -18,10 +18,11 @@ interface SeedUser {
     birth?:     string,
     country?:   string,
     document?:  string,
-    email:     string,
-    name:      string,
-    password:  string,
-    role:      'admin' | 'client'
+    email:      string,
+    name:       string,
+    lastname:   string,
+    password:   string,
+    role:       'admin' | 'client'
 }
 
 type ValidSizes = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXL';
@@ -42,13 +43,22 @@ export const initialData: SeedData = {
     users: [
         {
             email: 'callestanly@gmail.com',
-            name: 'Stanly Calle Samper',
+            name: 'Stanly',
+            lastname: 'Calle',
             password: bcrypt.hashSync('123456'),
             role: 'admin',
         },
         {
             email: 'rubencalle95@gmail.com',
-            name: 'Ruben Calle Samper',
+            name: 'Ruben',
+            lastname: 'Calle',
+            password: bcrypt.hashSync('123456'),
+            role: 'client',
+        },
+        {
+            email: 'steffy0711@gmail.com',
+            name: 'Steffy',
+            lastname: 'Saavedra',
             password: bcrypt.hashSync('123456'),
             role: 'client',
         },
