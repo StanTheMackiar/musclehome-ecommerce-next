@@ -7,14 +7,15 @@ import { AuthContext, UIContext } from "../../context";
 
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Typography } from '@mui/material';
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, 
-LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
+LoginOutlined, MaleOutlined, SearchOutlined, Login, VpnKeyOutlined } from "@mui/icons-material"
 
 import { ChangeLanguage } from './';
+import { AdminPanel } from './AdminPanel';
 
 
 export const SideMenu = () => {
 
-    const { isLoggedIn, user } = useContext(AuthContext)
+    const { isLoggedIn, logOut, user } = useContext(AuthContext)
     const { lang } = useContext(LangContext);
     const { ui: {shop_layout: {side_menu}} } = lang;
     
@@ -23,7 +24,7 @@ export const SideMenu = () => {
 
    
 
-    const {push} = useRouter()
+    const router = useRouter()
 
     const onSearchTerm = () => {
         if ( searchTerm.trim().length === 0 ) return;
@@ -32,10 +33,9 @@ export const SideMenu = () => {
     }
 
     const navigateTo = ( url:string ) => {
-        push(url)
+        router.push(url)
         toggleSideMenu();
     }
-
 
   return (
     <Drawer
@@ -48,8 +48,12 @@ export const SideMenu = () => {
             
             <List>
 
-                <ListItem>
-                    <Typography variant='subtitle1'>{ isLoggedIn ? `Hola, ${ user?.name }` : 'Invitado'}</Typography>
+                <ListItem sx={{ display: 'flex', flexDirection: 'column', alignItems: 'start'}}>
+                    <Typography variant='subtitle1'>{ isLoggedIn ? `${ user?.name } ${ user?.lastname }` : 'Invitado'}</Typography>
+                    {
+                        (user?.role === 'admin') &&
+                        <Typography variant='body2'>Administrador</Typography>
+                    }
 
                 </ListItem>
 
@@ -105,59 +109,60 @@ export const SideMenu = () => {
 
                 <ListSubheader>{side_menu.account.subheader}</ListSubheader>
 
-                <ListItem button onClick={() => navigateTo('/auth/login')}>
-                    <ListItemIcon>
-                        <VpnKeyOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={side_menu.account.login} />
-                </ListItem>
+               { 
+                !isLoggedIn &&
+                    <>
+                        <ListItem button onClick={() => navigateTo(`/auth/login?page=${ router.asPath }`)}>
+                            <ListItemIcon>
+                                <Login/>
+                            </ListItemIcon>
+                            <ListItemText primary={side_menu.account.login} />
+                        </ListItem>
 
-                <ListItem button>
-                    <ListItemIcon>
-                        <AccountCircleOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={side_menu.account.profile} />
-                </ListItem>
+                        <ListItem button onClick={() => navigateTo(`/auth/register?page=${ router.asPath }`)}>
+                            <ListItemIcon>
+                                <VpnKeyOutlined/>
+                            </ListItemIcon>
+                            <ListItemText primary={side_menu.account.register} />
+                        </ListItem>
 
-                <ListItem button onClick={() => navigateTo('/orders/history')}>
-                    <ListItemIcon>
-                        <ConfirmationNumberOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={side_menu.account.orders} />
-                </ListItem>
-
-                <ListItem button>
-                    <ListItemIcon>
-                        <LoginOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={side_menu.account.logout} />
-                </ListItem>
+                    </>
+                }
 
 
+                {
+                isLoggedIn &&
+                <>
+                    {/* Perfil */}
+                    <ListItem button>
+                        <ListItemIcon>
+                            <AccountCircleOutlined/>
+                        </ListItemIcon>
+                        <ListItemText primary={side_menu.account.profile} />
+                    </ListItem>
+
+                    {/* Ordenes */}
+                    <ListItem button onClick={() => navigateTo('/orders/history')}>
+                        <ListItemIcon>
+                            <ConfirmationNumberOutlined/>
+                        </ListItemIcon>
+                        <ListItemText primary={side_menu.account.orders} />
+                    </ListItem>
+
+                    {/* Salir */}
+                        <ListItem button onClick={ logOut }>
+                            <ListItemIcon>
+                                <LoginOutlined/>
+                            </ListItemIcon>
+                            <ListItemText primary={side_menu.account.logout} />
+                        </ListItem>
+                </>
+                }
+
+                
                 {/* Admin */}
-                <Divider />
+                { user?.role === 'admin' && <AdminPanel /> }
 
-                <ListSubheader>{side_menu.admin.subheader}</ListSubheader>
-
-                <ListItem button>
-                    <ListItemIcon>
-                        <CategoryOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={side_menu.admin.products} />
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>
-                        <ConfirmationNumberOutlined/>
-                    </ListItemIcon>
-                    <ListItemText primary={side_menu.admin.orders} />
-                </ListItem>
-
-                <ListItem button>
-                    <ListItemIcon>
-                        <AdminPanelSettings/>
-                    </ListItemIcon>
-                    <ListItemText primary={side_menu.admin.users} />
-                </ListItem>
 
                 <Divider />
 

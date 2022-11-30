@@ -1,9 +1,12 @@
+import { GetServerSideProps, NextPage } from 'next'
+import Link from 'next/link'
+
 import { CheckOutlined } from '@mui/icons-material'
 import { Typography, Grid, Card, CardContent, Divider, Box, Button } from '@mui/material'
-import { NextPage } from 'next'
-import Link from 'next/link'
+
 import { CartList, OrderSummary } from '../../components/cart'
 import { ShopLayout } from '../../components/layouts'
+import { verification } from '../../services'
 
 
 const SummaryPage: NextPage = () => {
@@ -66,6 +69,7 @@ const SummaryPage: NextPage = () => {
 </ShopLayout>
    )
 }
+
 
 
 export default SummaryPage

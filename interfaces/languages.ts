@@ -38,6 +38,7 @@ export interface Account {
   orders: string
   login: string
   logout: string
+  register: string
 }
 
 export interface Home {

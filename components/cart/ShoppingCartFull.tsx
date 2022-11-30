@@ -24,8 +24,9 @@ export const ShoppingCartFull:FC = () => {
 
                             <Box sx={{ mt: 2 }}>
                                 <Button 
-                                    color='secondary' className='circular-btn' 
+                                    color='secondary' className='circular-btn'
                                     fullWidth
+                                    href='/checkout/address'
                                 >
                                     Checkout
                                 </Button>

@@ -93,6 +93,14 @@ export const lightTheme = createTheme({
           borderRadius: '10px',
         }
       }
+    },
+
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          margin: '1rem 0'
+        }
+      }
     }
     
   }

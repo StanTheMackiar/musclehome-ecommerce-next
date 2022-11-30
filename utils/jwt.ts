@@ -29,6 +29,8 @@ export const isValidToken = ( token: string ): Promise<string> => {
         throw new Error ('Do not have Jason Web Token seed, check enviroment variables')
     }
 
+    if ( token.length <= 10 ) return Promise.reject('JWT is not valid');
+
     return new Promise( (resolve, reject) => {
 
         try {

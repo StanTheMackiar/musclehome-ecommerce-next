@@ -16,10 +16,11 @@
         },
         "account": {
           "subheader": "Cuenta",
-          "profile": "Perfiles", 
+          "profile": "Perfil", 
           "orders": "Ordenes",
           "login": "Ingresar",
-          "logout": "Salir"
+          "logout": "Salir",
+          "register": "Registrarse"
         }
       }
   }

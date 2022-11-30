@@ -1,6 +1,10 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { NextPage } from 'next'
+import { GetServerSideProps } from 'next'
+
 import { ShopLayout } from '../../components/layouts/ShopLayout';
+import { verification } from '../../services';
+import { jwt } from '../../utils';
 
 
 const AdressPage: NextPage = () => {
@@ -55,6 +59,25 @@ const AdressPage: NextPage = () => {
       </ShopLayout>
    )
 }
+
+
+// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    
+//     const { token = '' } = req.cookies;
+
+//     const isLogin = await verification.isLogin( token )
+
+//     if ( !isLogin ) {
+//         return {
+//             redirect: {
+//                 destination: `/auth/login?page=${req.url || '/'}
+//                 permanent: false,
+//             }
+//         }
+//     }
+
+//     return { props: {} }
+// }
 
 
 export default AdressPage

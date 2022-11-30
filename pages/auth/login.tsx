@@ -9,7 +9,6 @@ import { Grid, TextField, Typography, Button, CircularProgress } from '@mui/mate
 
 import { AuthLayout } from '../../components/layouts';
 import { validations } from '../../utils';
-import { shopApi } from '../../api';
 import { AuthContext } from '../../context';
 import { useRouter } from 'next/router';
 
@@ -26,6 +25,8 @@ const LoginPage: NextPage = () => {
    const [ isLoading, setIsLoading ] = useState(false);
    const { register, reset,  handleSubmit, formState: { errors } } = useForm<FormData>();
    const { loginUser } = useContext(AuthContext);
+
+   const destination = router.query.page?.toString() || '/';
 
    const onLoginUser = async( { email, password }: FormData ) => {   
 
@@ -45,8 +46,8 @@ const LoginPage: NextPage = () => {
       }
 
       setIsLoading(false);
-      router.replace('/')
-
+      
+      router.replace(destination)
    }
 
    return (
@@ -119,7 +120,7 @@ const LoginPage: NextPage = () => {
                   <Grid item xs={12} display='flex' justifyContent='end'>               
                         <Typography variant='body1'>
                         {`¿Aún no eres miembro? `}
-                           <Link href='/auth/register' style={{color: 'black'}}>Regístrate</Link>
+                           <Link href={`/auth/register?page=${ destination }`} style={{color: 'black'}}>Regístrate</Link>
                         </Typography>
                   </Grid>
                   

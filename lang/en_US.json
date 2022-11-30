@@ -19,7 +19,8 @@
               "profile": "Profile",
               "orders": "Orders",
               "login": "Log in",
-              "logout": "Log out"
+              "logout": "Log out",
+              "register": "Sign Up"
             }
           }
       }

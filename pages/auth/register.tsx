@@ -32,6 +32,7 @@ const RegisterPage: NextPage = () => {
 
    const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>();
 
+   const destination = router.query.page?.toString() || '/';
 
    const onRegisterForm = async({name, lastname, email, password}: FormData ) => {
 
@@ -50,8 +51,7 @@ const RegisterPage: NextPage = () => {
          }, 2000);
          return;
       }
-
-      router.replace('/');
+      router.replace(destination)
    }
 
    return (
@@ -179,7 +179,7 @@ const RegisterPage: NextPage = () => {
                   <Grid item xs={12} display='flex' justifyContent='end'>               
                         <Typography variant='body1'>
                         {`¿Ya posees una cuenta? `}
-                           <Link href='/auth/login' style={{color: 'black'}}>Acceder</Link>
+                           <Link href={`/auth/login?page=${destination}`} style={{color: 'black'}}>Acceder</Link>
                         </Typography>
                   </Grid>
                   

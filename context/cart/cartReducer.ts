@@ -16,6 +16,7 @@ export const cartReducer = ( state: CartState, action: CartActionType): CartStat
        case 'Cart - LoadCart from cookies':
            return {
                ...state,
+               isLoaded: true,
                cart: action.payload
            }
 
@@ -38,10 +39,6 @@ export const cartReducer = ( state: CartState, action: CartActionType): CartStat
             return {
                 ...state,
                 cart: state.cart.filter( product => product !== action.payload )
-
-                //Otra manera
-                
-                // cart: state.cart.filter( product => !( product._id === action.payload._id && product.size === action.payload.size ))
             }
         
         case 'Cart - Update order summary':

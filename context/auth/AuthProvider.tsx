@@ -4,19 +4,23 @@ import { AuthContext,  authReducer } from './';
 import shopApi from '../../api/shopApi';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+
+
 export interface AuthState {
     isLoggedIn: boolean,
     user?: IUserLogin,
 
 }
 
-
 const AUTH_INITIAL_STATE: AuthState = {
     isLoggedIn: false,
     user: undefined,
 }
+
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
+   const router = useRouter();
    const [state, dispatch] = useReducer( authReducer, AUTH_INITIAL_STATE)
 
 
@@ -26,9 +30,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const checkToken = async() => {
 
+        if ( !Cookies.get('token') ) return;
+
         try {
             const { data: { user, token } } = await shopApi.get<ILogin>('/user/validate');
-
             const newToken = token;
             Cookies.set('token', newToken)
 
@@ -79,12 +84,20 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     }
 
+    // Provicional
+    const logOut = () => {
+        Cookies.remove('token');
+        Cookies.remove('cart');
+        router.reload();
+    }
+
 
    return (
        <AuthContext.Provider value={{
          ...state,
 
         loginUser,
+        logOut,
         registerUser,
 
        }}>

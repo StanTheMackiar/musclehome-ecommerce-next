@@ -6,12 +6,14 @@ import { ICartProduct, ICartSummary } from '../../interfaces';
 
 export interface CartState {
     cart: ICartProduct[],
+    isLoaded: boolean,
     summary: ICartSummary,
 }
 
 
 const CART_INITIAL_STATE: CartState = {
     cart: [],
+    isLoaded: false,
     summary: {} as ICartSummary,
 }
 
@@ -23,10 +25,10 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
    useEffect(()=> {
         try {
-            const cookieProducts: ICartProduct[] = JSON.parse(Cookie.get('cart')!) || []
-            dispatch({type: 'Cart - Update products in cart', payload: cookieProducts})
+            const cookieProducts: ICartProduct[] = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')!) : []
+            dispatch({type: 'Cart - LoadCart from cookies', payload: cookieProducts})
         } catch (error) {
-            dispatch({type: 'Cart - Update products in cart', payload: []})
+            dispatch({type: 'Cart - LoadCart from cookies', payload: []})
         }
    }, [])
 
