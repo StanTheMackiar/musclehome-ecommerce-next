@@ -1,14 +1,14 @@
 import { FC } from "react";
 import { Grid, Box, Typography } from "@mui/material";
 import { IProduct } from "../../../interfaces";
-import { ProductDetailsAddToCart } from ".";
+import { AddToCart } from ".";
 import { ProductSlideShow } from "../ProductSlideShow";
 
 interface Props {
   product: IProduct;
 }
 
-export const Details: FC<Props> = ({ product }) => {
+export const ProductDetails: FC<Props> = ({ product }) => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} sm={7}>
@@ -25,7 +25,7 @@ export const Details: FC<Props> = ({ product }) => {
             variant="subtitle1"
             component="h2"
           >{`$${product.price}`}</Typography>
-          <ProductDetailsAddToCart product={product} />
+          <AddToCart product={product} />
         </Box>
       </Grid>
     </Grid>

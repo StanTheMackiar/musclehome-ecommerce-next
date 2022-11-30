@@ -1,58 +1,18 @@
-import { useState, useContext } from 'react';
 import { NextPage } from 'next'
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { useForm } from 'react-hook-form';
 import { Box } from '@mui/system';
 import { Grid, TextField, Typography, Button, CircularProgress } from '@mui/material';
 
 import { AuthLayout } from '../../components/layouts';
 import { validations } from '../../utils';
-import { AuthContext } from '../../context';
+import { useRegister } from '../../hooks';
 
 
-type FormData = {
-   name        : string,
-   lastname    : string,
-   email       : string,
-   password    : string,
-   confPassword: string
-   
-}
 
 const RegisterPage: NextPage = () => {
 
-   const router = useRouter();
-   const { registerUser } = useContext(AuthContext)
-
-   const [ showError, setShowError ] = useState(false)
-   const [ errorDisplayed, setErrorDisplayed ] = useState('');
-   const [ isLoading, setIsLoading ] = useState(false)
-
-   const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>();
-
-   const destination = router.query.page?.toString() || '/';
-
-   const onRegisterForm = async({name, lastname, email, password}: FormData ) => {
-
-      console.log({name})
-
-      setShowError(false)
-      setIsLoading(true)
-      const { hasError, message } = await registerUser(name, lastname, email, password);
-
-      if ( hasError ) {
-         setTimeout(() => {
-            setShowError(true)
-            setIsLoading(false)
-            setErrorDisplayed( message! );
-            setTimeout(()=> setShowError(false), 3000)
-         }, 2000);
-         return;
-      }
-      router.replace(destination)
-   }
+   const { destination, errorDisplayed, errors, getValues, handleSubmit, isLoading, onRegisterForm, register, showError } = useRegister()
 
    return (
       <AuthLayout title='Registrarse'>

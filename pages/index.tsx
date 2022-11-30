@@ -24,7 +24,6 @@ const HomePage: NextPage = () => {
       <Typography variant='body1' textAlign='center'><em>{lang.home.page_content.message}</em></Typography>
       <Typography textAlign='center' variant='h2' component='h2' sx={{ mt: 5 }}>{lang.home.page_content.subtitle}</Typography>
 
-
       {
         isLoading
           ? <FullScreenLoading />

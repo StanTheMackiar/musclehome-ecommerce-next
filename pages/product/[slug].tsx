@@ -1,26 +1,22 @@
 import React from 'react'
 import { GetStaticProps, NextPage, GetStaticPaths } from 'next';
+
 import { ShopLayout } from '../../components/layouts';
 import { IProduct } from '../../interfaces';
 import { dbProducts } from '../../database';
-import { Details } from '../../components/products';
+import { ProductDetails } from '../../components/products';
 
 interface Props {
   product: IProduct
 }
 
 
-const ProductPage: NextPage<Props> = ({ product }) => {
+const ProductPage: NextPage<Props> = ({ product }) => (
 
-
-  return (
     <ShopLayout title={ product.title } description={ product.description }>
-      
-      <Details product={product} />
- 
+      <ProductDetails product={product} />
     </ShopLayout>
-  )
-}
+);
 
 
 
@@ -28,8 +24,6 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
   const slugs = await dbProducts.getAllProductSlugs();
-
-   
 
   return {
     paths: slugs.map(({slug}) => ({
@@ -44,7 +38,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const { slug = '' } = params as { slug: string }
 
-  
   const product = await dbProducts.getProductBySlug( slug );
 
   if ( !product ) {
