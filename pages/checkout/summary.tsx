@@ -14,7 +14,7 @@ const SummaryPage: NextPage = () => {
 
     const { shippingAdress: address, summary: { numberOfItems } } = useContext(CartContext)
     
-    
+
 
    return (
     <ShopLayout title='Resumen de la orden' description='Resumen de la orden'>

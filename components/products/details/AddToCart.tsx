@@ -1,59 +1,22 @@
-import { useContext, useState } from "react";
+import { FC } from "react";
+
 import { AddShoppingCartOutlined } from "@mui/icons-material";
 import { Box, Typography, Button } from "@mui/material";
-import { FC } from "react";
+
 import { ItemCounter } from "../../cart";
 import { SizeSelector } from "../SizeSelector";
-import { useRouter } from "next/router";
-import { ICartProduct, IProduct, IValidSize } from "../../../interfaces"
-import { CartContext } from "../../../context";
+import { IProduct } from "../../../interfaces";
+import { useAddToCart } from '../../../hooks/useAddToCart';
 
-interface Props {
+
+export interface Props {
   product: IProduct;
 }
 
-export const ProductDetailsAddToCart: FC<Props> = ({ product }) => {
+export const AddToCart: FC<Props> = ({ product }) => {
 
-
-    const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
-        _id: product._id,
-        image: product.images[0],
-        inStock: product.inStock,
-        price: product.price,
-        size: undefined,
-        slug: product.slug,
-        title: product.title,
-        gender: product.gender,
-        quantity: 1,
-    });
-    
-    const router = useRouter()
-
-    const { addProductToCart } = useContext(CartContext)
-
-    const onSelectedSize = ( size: IValidSize ) => {
-        setTempCartProduct( currentProduct => ({
-            ...currentProduct,
-            size,
-        }));
-    }
-
-    const onAddProduct = () => {
-    
-        if ( !tempCartProduct.size ) return;
-
-        addProductToCart(tempCartProduct);
-        router.push('/cart');
-    }
-
-    const onUpdatedQuantity = (quantity: number) => {
-
-        setTempCartProduct( current => ({
-                ...current, 
-                quantity,
-        }))
-
-    }
+  const { tempCartProduct, onAddProduct, onSelectedSize, onUpdatedQuantity } = useAddToCart({ product })
+   
 
   return (
     <>
@@ -86,7 +49,7 @@ export const ProductDetailsAddToCart: FC<Props> = ({ product }) => {
         />
       </Box>
 
-      {/* Agregar al carrito */}
+      {/* Boton Agregar al carrito */}
 
       {product.inStock > 0 ? (
         <Button

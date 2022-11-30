@@ -5,7 +5,7 @@ import { ICartProduct, ICartSummary, IShippingAdress } from '../../interfaces';
 
 interface ContextProps {
     cart: ICartProduct[],
-    isLoaded: boolean,
+    isCookiesLoaded: boolean,
     shippingAdress?: IShippingAdress,
     summary: ICartSummary,
 

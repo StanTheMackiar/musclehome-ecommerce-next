@@ -6,7 +6,7 @@ import { ICartProduct, ICartSummary, IShippingAdress } from '../../interfaces';
 
 export interface CartState {
     cart: ICartProduct[],
-    isLoaded: boolean,
+    isCookiesLoaded: boolean,
     shippingAdress?: IShippingAdress
     summary: ICartSummary,
 }
@@ -14,7 +14,7 @@ export interface CartState {
 
 const CART_INITIAL_STATE: CartState = {
     cart: [],
-    isLoaded: false,
+    isCookiesLoaded: false,
     shippingAdress: undefined,
     summary: {} as ICartSummary,
 }

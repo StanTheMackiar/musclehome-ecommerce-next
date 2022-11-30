@@ -32,10 +32,12 @@ export const ShopLayout:FC<PropsWithChildren<Props>> = ({children, description, 
         </Head>
 
         <SideMenu />
-
-        <nav>
-          <NavBar />
-        </nav>
+        
+        <header>
+          <nav>
+            <NavBar />
+          </nav>
+        </header>
 
         <main style={{
             margin: '80px auto',
