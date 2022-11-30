@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 
 interface SeedProduct {
     description: string;
+    gender: 'men'|'women'|'kid'|'unisex'
     images: string[];
     inStock: number;
     price: number;
@@ -11,26 +12,31 @@ interface SeedProduct {
     tags: string[];
     title: string;
     type: ValidTypes;
-    gender: 'men'|'women'|'kid'|'unisex'
 }
+
+type ValidSizes = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXL';
+type ValidTypes = 'shirts'|'pants'|'hoodies'|'hats';
 
 interface SeedUser {
     birth?:     string,
     country?:   string,
     document?:  string,
     email:      string,
-    name:       string,
     lastname:   string,
+    name:       string,
     password:   string,
     role:       'admin' | 'client'
 }
 
-type ValidSizes = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXL';
-type ValidTypes = 'shirts'|'pants'|'hoodies'|'hats';
+interface SeedCountries {
+    code: string,
+    name: string,
+}
 
 interface SeedData {
-    users:  SeedUser[],
+    countries: SeedCountries[],
     products: SeedProduct[],
+    users:  SeedUser[],
 }    
 
 
@@ -40,6 +46,12 @@ interface SeedData {
 
 
 export const initialData: SeedData = {
+    countries: [
+        {
+            name: 'Colombia',
+            code: 'COL',
+        }
+    ],
     users: [
         {
             email: 'callestanly@gmail.com',

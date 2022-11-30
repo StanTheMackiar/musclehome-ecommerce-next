@@ -23,7 +23,7 @@ const CartPage: NextPage = () => {
   }
 
   return (
-    <ShopLayout title={`Carrito de compras - ${ numberOfItems }`} description='Carrito de compras de la tienda'>
+    <ShopLayout title={`Carrito de compras - ${ numberOfItems } ${numberOfItems <= 1 ? 'producto' : 'productos'}`} description='Carrito de compras de la tienda'>
         <ShoppingCartFull />
     </ShopLayout>
   )

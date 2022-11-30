@@ -1,4 +1,5 @@
-import { GetServerSideProps, NextPage } from 'next'
+import { useContext } from 'react';
+import { NextPage } from 'next'
 import Link from 'next/link'
 
 import { CheckOutlined } from '@mui/icons-material'
@@ -6,10 +7,14 @@ import { Typography, Grid, Card, CardContent, Divider, Box, Button } from '@mui/
 
 import { CartList, OrderSummary } from '../../components/cart'
 import { ShopLayout } from '../../components/layouts'
-import { verification } from '../../services'
+import { CartContext } from '../../context/';
 
 
 const SummaryPage: NextPage = () => {
+
+    const { shippingAdress: address, summary: { numberOfItems } } = useContext(CartContext)
+    
+    
 
    return (
     <ShopLayout title='Resumen de la orden' description='Resumen de la orden'>
@@ -22,16 +27,25 @@ const SummaryPage: NextPage = () => {
         <Grid item xs={ 12 } sm={ 5 }>
             <Card className='summary-card'>
                 <CardContent>
-                    <Typography variant='h2'>Resumen (3 productsos)</Typography>
+                    <Typography variant='h2'>Resumen ({`${numberOfItems} ${numberOfItems <= 1 ? 'producto' : 'productos'}`})</Typography>
 
                     <Divider sx={{ my: 1}} />
 
 
-                    <Typography variant='subtitle1'>Dirección de entrega</Typography>
-                    <Typography>Stanly Calle</Typography>
-                    <Typography>Cra 8B #47-93</Typography>
-                    <Typography>Barranquilla - Colombia</Typography>
-                    <Typography>+57 3163776973</Typography>
+                    {
+                        address ? (
+                            <>
+                                <Typography variant='subtitle1'>Dirección de entrega</Typography>
+                                <Typography>{ `${address.name} ${address.lastname}` }</Typography>
+                                <Typography>{ address.address } { address.address2 ? `- ${address.address2}` : '' }</Typography>
+                                <Typography>{ address.city } - { address.country }</Typography>
+                                <Typography>{ address.zip }</Typography>
+                                <Typography>{ address.phone }</Typography>
+                            </>
+                        ) : (
+                            <Typography variant='body2' sx={{my: 3}}>No se encontraron los datos de entrega</Typography>
+                        )
+                    }
 
                     <Box display='flex' justifyContent='end' >
                         <Link href='/checkout/address' style={{color: 'black'}}>

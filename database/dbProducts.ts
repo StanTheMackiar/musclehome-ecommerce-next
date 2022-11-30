@@ -30,6 +30,9 @@ export const getAllProductSlugs = async(): Promise<ProductSlug[]> => {
     return slugs;
 }
 
+
+// Search
+
 export const getProductsByTerm = async ( term:string ): Promise<IProduct[]> => {
      
     term = term.toString().toLowerCase();
