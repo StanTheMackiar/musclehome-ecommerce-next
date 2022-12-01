@@ -1,15 +1,16 @@
 import { FC, PropsWithChildren, useReducer, useEffect } from 'react';
-import { ILogin, IUserLogin } from '../../interfaces';
+import { ILogin, IUserLogged } from '../../interfaces';
 import { AuthContext,  authReducer } from './';
 import shopApi from '../../api/shopApi';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 
 export interface AuthState {
     isLoggedIn: boolean,
-    user?: IUserLogin,
+    user?: IUserLogged,
 
 }
 
@@ -20,30 +21,17 @@ const AUTH_INITIAL_STATE: AuthState = {
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
+   const { data, status } = useSession();
    const router = useRouter();
    const [state, dispatch] = useReducer( authReducer, AUTH_INITIAL_STATE)
 
-
     useEffect(() => {
-        checkToken();
-    }, []);
+        if ( status  === 'authenticated' ) {
+            console.log(data.user)
 
-    const checkToken = async() => {
-
-        if ( !Cookies.get('token') ) return;
-
-        try {
-            const { data: { user, token } } = await shopApi.get<ILogin>('/user/validate');
-            const newToken = token;
-            Cookies.set('token', newToken)
-
-            dispatch({type: 'Auth - Login', payload: user})
-
-        } catch (error) {
-            console.log(error);
-            Cookies.remove('token');
+            // dispatch({type: 'Auth - Login', payload: data.user as IUserLogged})
         }
-    }
+    }, [ status, data ]);
 
     const loginUser = async( email: string, password: string ): Promise<boolean> => {
 

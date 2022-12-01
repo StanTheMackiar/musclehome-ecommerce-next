@@ -1,10 +1,10 @@
 
-import { IUserLogin } from '../../interfaces';
+import { IUserLogged } from '../../interfaces';
 import { AuthState } from './';
 
 
 type AuthActionType = 
-   | { type: 'Auth - Login', payload: IUserLogin }
+   | { type: 'Auth - Login', payload: IUserLogged }
 
 
 export const authReducer = ( state: AuthState, action: AuthActionType): AuthState => {

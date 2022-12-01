@@ -3,6 +3,7 @@ import { NextPage } from 'next';import { ShoppingCartEmpty, ShoppingCartFull } f
 
 import { ShopLayout } from '../../components/layouts';
 import { CartContext } from '../../context/cart';
+import { FullScreenLoading } from '../../components/ui';
 
 
 
@@ -10,7 +11,6 @@ const CartPage: NextPage = () => {
 
   const { isCookiesLoaded, summary: { numberOfItems } } = useContext( CartContext )
 
-  if ( !isCookiesLoaded ) return <ShopLayout title='Revisando carrito' description='Carrito de compras'></ShopLayout>
 
   if ( isCookiesLoaded && numberOfItems > 0 ) {
     return (
@@ -20,12 +20,21 @@ const CartPage: NextPage = () => {
     )
   }
 
-  return (
+ if ( isCookiesLoaded && numberOfItems === 0 ) return (
     <ShopLayout title='Carrito vacío' description='No hay articulos en el carrito de compras'>
       <ShoppingCartEmpty />
     </ShopLayout>
   )
+
+  return (
+    <ShopLayout title='Cargando carrito' description='Cargando carrito de compras'>
+      <FullScreenLoading />
+    </ShopLayout>
+  )
+  
 }
+
+
 
 
 export default CartPage;

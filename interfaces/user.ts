@@ -16,10 +16,10 @@ export interface IUser {
 
 export interface ILogin {
     token: string
-    user: IUserLogin
+    user: IUserLogged
   }
   
-export interface IUserLogin {
+export interface IUserLogged {
     name: string,
     lastname: string,
     email: string,
