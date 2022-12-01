@@ -20,7 +20,7 @@ export const ProductCard:FC<Props> = ({ product }) => {
             <Link href={`/product/${product.slug}`}>
 
                 <CardActionArea>
-
+                    
                     {
                         product.inStock === 0 && (
                             <Chip 

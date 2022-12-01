@@ -28,7 +28,7 @@ const CartPage: NextPage = () => {
 }
 
 
-export default CartPage
+export default CartPage;
 
 
 
