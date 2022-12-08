@@ -28,8 +28,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         if ( status  === 'authenticated' ) {
             console.log(data.user)
             dispatch({type: 'Auth - Login', payload: data.user as IUserLogged})
-
         }
+
+        console.log('NO auntenticado')
     }, [ status, data ]);
 
     const loginUser = async( email: string, password: string ): Promise<boolean> => {

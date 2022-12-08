@@ -1,6 +1,8 @@
 import { NextPage } from 'next'
 import Link from 'next/link';
+import { GetServerSideProps } from 'next'
 
+import { getSession } from 'next-auth/react';
 import { Box } from '@mui/system';
 import { Grid, TextField, Typography, Button, CircularProgress } from '@mui/material';
 
@@ -29,6 +31,7 @@ const LoginPage: NextPage = () => {
                      <TextField
                         type='email'
                         label='Correo' 
+                        autoFocus
                         variant='outlined' 
                         fullWidth
                         { 
@@ -100,3 +103,27 @@ const LoginPage: NextPage = () => {
 
 
 export default LoginPage
+
+
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+   
+   const session = await getSession({ req })
+   const { page = '/' } = query;
+
+   if ( session ) {
+      return {
+         redirect: {
+            destination: String(page),
+            permanent: false
+         }
+      }
+   }
+
+   return {
+      props: {
+         
+      }
+   }
+}

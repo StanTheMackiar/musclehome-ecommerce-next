@@ -1,6 +1,5 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import FacebookProvider from "next-auth/providers/facebook";
 
 import Credentials from "next-auth/providers/credentials";
 import { dbUsers } from "../../../database";
@@ -11,21 +10,19 @@ export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
         name: 'Custom Login',
+        type: 'credentials',
         credentials: {
-            email: { label: 'Correo', type: 'email', placeholder: 'correo@gmail.com' },
-            passsword: { label: 'Contraseña', type: 'password', placeholder: 'Contraseña' },
+            // email: { label: 'Correo', type: 'email' },
+            // passsword: { label: 'Contraseña', type: 'password' },
         },
         async authorize(credentials, req) {
+
+            const { email, password } = credentials as { email: string, password: string }
             
-            return await dbUsers.checkUserEmailPassword( credentials!.email, credentials!.passsword )
+            return await dbUsers.checkUserEmailPassword( email, password )
 
             //Return null si falla
         }
-    }),
-
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID || '',
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET || '',
     }),
 
     GithubProvider({
@@ -36,6 +33,11 @@ export const authOptions: NextAuthOptions = {
 
   ],
 
+  // Custom Pagse
+  pages: {
+    signIn: '/auth/login',
+    newUser: '/auth/register'
+  },
   
   callbacks: {
     
