@@ -4,8 +4,7 @@ import { AuthContext,  authReducer } from './';
 import shopApi from '../../api/shopApi';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 
 
 export interface AuthState {
@@ -22,14 +21,14 @@ const AUTH_INITIAL_STATE: AuthState = {
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
    const { data, status } = useSession();
-   const router = useRouter();
    const [state, dispatch] = useReducer( authReducer, AUTH_INITIAL_STATE)
 
     useEffect(() => {
+
         if ( status  === 'authenticated' ) {
             console.log(data.user)
+            dispatch({type: 'Auth - Login', payload: data.user as IUserLogged})
 
-            // dispatch({type: 'Auth - Login', payload: data.user as IUserLogged})
         }
     }, [ status, data ]);
 
@@ -72,11 +71,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     }
 
-    // Provicional
     const logOut = () => {
-        Cookies.remove('token');
         Cookies.remove('cart');
-        router.reload();
+        Cookies.remove('address')
+        signOut();
+
+        //EL token es manejado por next auth
+        // Cookies.remove('token');
+        // router.reload();
     }
 
 

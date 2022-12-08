@@ -20,6 +20,7 @@ export interface ILogin {
   }
   
 export interface IUserLogged {
+    id: string,
     name: string,
     lastname: string,
     email: string,

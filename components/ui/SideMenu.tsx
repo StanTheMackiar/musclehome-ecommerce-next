@@ -6,7 +6,7 @@ import { AuthContext, UIContext } from "../../context";
 
 
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Typography } from '@mui/material';
-import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, 
+import { AccountCircleOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, 
 LoginOutlined, MaleOutlined, SearchOutlined, Login, VpnKeyOutlined } from "@mui/icons-material"
 
 import { ChangeLanguage } from './';
