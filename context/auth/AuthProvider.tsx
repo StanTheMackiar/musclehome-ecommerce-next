@@ -24,15 +24,15 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
    const [state, dispatch] = useReducer( authReducer, AUTH_INITIAL_STATE)
 
     useEffect(() => {
-
         if ( status  === 'authenticated' ) {
             console.log(data.user)
             dispatch({type: 'Auth - Login', payload: data.user as IUserLogged})
         }
 
-        console.log('NO auntenticado')
     }, [ status, data ]);
 
+
+    // Login Custom
     const loginUser = async( email: string, password: string ): Promise<boolean> => {
 
         try {
@@ -47,12 +47,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         }
     }
 
-    const registerUser = async( name: string, lastname: string, email: string, password: string ): Promise<{ hasError: boolean,  message ?: string}> => {
+
+
+    const registerUser = async( name: string, lastname: string, email: string, password: string ): Promise<{ hasError: boolean,  message ?: string }> => {
         try {
             const { data } = await shopApi.post<ILogin>('/user/register', { name, lastname, email, password });
-            const { token, user } = data;
-            Cookies.set( 'token', token );
-            dispatch({ type: 'Auth - Login', payload: user });
+            // const { token, user } = data;
+            // Cookies.set( 'token', token );
+            // dispatch({ type: 'Auth - Login', payload: user });
             return {
                 hasError: false
             }

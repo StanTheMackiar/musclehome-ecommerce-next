@@ -38,6 +38,12 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/login',
     newUser: '/auth/register'
   },
+
+  session: {
+    maxAge: 2592000, // 30 dias
+    strategy: 'jwt',
+    updateAge: 86400, // Cada dia se actualiza el token
+  },
   
   callbacks: {
     

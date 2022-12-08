@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../context";
+import { signIn } from 'next-auth/react';
 
 
 
@@ -30,8 +31,6 @@ export const useRegister = () => {
 
    const onRegisterForm = async({name, lastname, email, password}: FormData ) => {
 
-      console.log({name})
-
       setShowError(false)
       setIsLoading(true)
       const { hasError, message } = await registerUser(name, lastname, email, password);
@@ -45,7 +44,10 @@ export const useRegister = () => {
          }, 2000);
          return;
       }
-      router.replace(destination)
+
+
+      await signIn('credentials', { email, password });
+      // router.replace(destination)
    }
 
    return {
@@ -55,6 +57,8 @@ export const useRegister = () => {
         showError,
         destination,
 
+
+        //Methods
         onRegisterForm,
         register,
         handleSubmit,

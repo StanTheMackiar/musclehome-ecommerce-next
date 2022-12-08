@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import Link from 'next/link';
 
 import { Box } from '@mui/system';
@@ -7,6 +7,7 @@ import { Grid, TextField, Typography, Button, CircularProgress } from '@mui/mate
 import { AuthLayout } from '../../components/layouts';
 import { validations } from '../../utils';
 import { useRegister } from '../../hooks';
+import { getSession } from 'next-auth/react';
 
 
 
@@ -152,3 +153,26 @@ const RegisterPage: NextPage = () => {
 
 
 export default RegisterPage
+
+
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+   
+   const session = await getSession({ req })
+   const { page = '/' } = query;
+
+   if ( session ) {
+      return {
+         redirect: {
+            destination: String(page),
+            permanent: false
+         }
+      }
+   }
+
+   return {
+      props: {
+         
+      }
+   }
+}
