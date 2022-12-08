@@ -1,30 +1,39 @@
 
-import { NextResponse } from 'next/server';
+import { NextFetchEvent, NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import * as jose from 'jose';
+import { getToken } from 'next-auth/jwt';
+import { ICartProduct } from './interfaces';
+import { IShippingAdress } from './interfaces/shippingAdress';
 
 // This function can be marked `async` if using `await` inside
-export async function middleware(req: NextRequest ) {
+export async function middleware(req: NextRequest, ev: NextFetchEvent ) {
+
+  // Leyendo las cookies
+  const cart: ICartProduct[] = req.cookies.get('cart') && JSON.parse(req.cookies.get('cart')?.value as string) || [];
+  const address: IShippingAdress = req.cookies.get('address') && JSON.parse(req.cookies.get('address')?.value as string);
+
+  console.log({address})
+
+  const previousPage = req.nextUrl.pathname
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
   if ( req.nextUrl.pathname.startsWith('/checkout') ) {
 
-        const token = req.cookies.get('token')?.value || '';
-        const previousPage = req.nextUrl.pathname
-        
-        try {
-            await jose.jwtVerify(
-                token,
-                new TextEncoder().encode(process.env.JWT_SECRET_SEED)
-              )
-            return NextResponse.next();
-
-        } catch (error) {
-            return NextResponse.redirect( new URL(`/auth/login?page=${previousPage}`, req.url))
-        }
+        if ( !session ) return NextResponse.redirect( new URL(`/auth/login?page=${previousPage}`, req.url))
     }
 
+
+  if ( req.nextUrl.pathname.startsWith('/checkout/summary') ) {
+
+      if ( cart.length === 0 ) return NextResponse.redirect( new URL(`/cart`, req.url))
+      if ( !address ) return NextResponse.redirect( new URL(`/checkout/address`, req.url))
+
+      return NextResponse.next();
+
+  }
     
   return NextResponse.next();
+
 }
 
 export const config = {

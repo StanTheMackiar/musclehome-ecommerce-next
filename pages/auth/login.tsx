@@ -2,9 +2,11 @@ import { NextPage } from 'next'
 import Link from 'next/link';
 import { GetServerSideProps } from 'next'
 
-import { getSession } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
+
 import { Box } from '@mui/system';
-import { Grid, TextField, Typography, Button, CircularProgress } from '@mui/material';
+import { Grid, TextField, Typography, Button, CircularProgress, Divider } from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 import { AuthLayout } from '../../components/layouts';
 import { validations } from '../../utils';
@@ -90,6 +92,23 @@ const LoginPage: NextPage = () => {
                         {`¿Aún no eres miembro? `}
                            <Link href={`/auth/register?page=${ destination }`} style={{color: 'black'}}>Regístrate</Link>
                         </Typography>
+                  </Grid>
+
+                  <Divider sx={{width: '100%', m: 3 }} />
+
+                  <Grid item xs={12} display='flex' flexDirection='column' justifyContent='end'>
+                        <Button 
+                           variant='contained' 
+                           fullWidth 
+                           size='large'
+                           color='primary' 
+                           sx={{ mb: 1 }}
+                           className='circular-btn'
+                           onClick={() => signIn('github')} 
+                           startIcon={<GitHubIcon />}
+                        >
+                           Continuar con GitHub
+                        </Button>
                   </Grid>
                   
                </Grid>

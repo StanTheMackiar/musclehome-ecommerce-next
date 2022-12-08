@@ -7,10 +7,10 @@ import { SWRConfig } from 'swr';
 import { AuthProvider, CartProvider, UIProvider } from '../context';
 import { SessionProvider } from 'next-auth/react';
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps} }: AppProps) {
 
   return (
-    <SessionProvider>
+    <SessionProvider session={session}>
       <SWRConfig 
         value={{
           fetcher: (resource, init) => fetch(resource, init).then(res => res.json())

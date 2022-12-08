@@ -4,6 +4,7 @@ import { NextPage } from 'next';import { ShoppingCartEmpty, ShoppingCartFull } f
 import { ShopLayout } from '../../components/layouts';
 import { CartContext } from '../../context/cart';
 import { FullScreenLoading } from '../../components/ui';
+import { useRouter } from 'next/router';
 
 
 

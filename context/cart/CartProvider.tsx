@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect, useReducer } from 'react'
+import { FC, PropsWithChildren, useEffect, useReducer, useRef } from 'react'
 import Cookies from 'js-cookie'
 
 import { CartContext,  cartReducer } from './';
@@ -16,13 +16,20 @@ const CART_INITIAL_STATE: CartState = {
     cart: [],
     isCookiesLoaded: false,
     shippingAdress: undefined,
-    summary: {} as ICartSummary,
+    summary: {
+        numberOfItems: 0,
+        subtotal: 0,
+        tax: 0,
+        total: 0,
+    },
 }
 
 
 export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
    const [state, dispatch] = useReducer( cartReducer, CART_INITIAL_STATE )
+
+   let firstRender = useRef(true);
 
 
    useEffect(()=> {
@@ -37,7 +44,12 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
 
    useEffect(() => {
-        if (state.cart.length > 0) Cookies.set('cart', JSON.stringify(state.cart))
+        if ( firstRender.current ) {
+            firstRender.current = false
+            return 
+        } 
+
+        if ( !firstRender.current ) Cookies.set('cart', JSON.stringify(state.cart))
      
    }, [state.cart])
    

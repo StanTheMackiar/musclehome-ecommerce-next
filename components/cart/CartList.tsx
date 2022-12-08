@@ -67,8 +67,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                     alignItems="center"
                     variant="button"
                   >
-                    {product.quantity}{" "}
-                    {product.quantity < 1 ? "producto" : "productos"}
+                    {product.quantity} {product.quantity <= 1 ? "producto" : "productos"}
                   </Typography>
                 )}
 

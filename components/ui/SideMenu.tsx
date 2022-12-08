@@ -5,7 +5,7 @@ import { LangContext } from '../../context/lang/LangContext';
 import { AuthContext, UIContext } from "../../context";
 
 
-import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Typography } from '@mui/material';
+import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader, Typography } from '@mui/material';
 import { AccountCircleOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, 
 LoginOutlined, MaleOutlined, SearchOutlined, Login, VpnKeyOutlined } from "@mui/icons-material"
 
@@ -81,21 +81,21 @@ export const SideMenu = () => {
 
                 {/* Categories */}
                 
-                <ListItem onClick={()=> navigateTo('/category/men')} button sx={{ display: { xs: '', md: 'none' } }}>
+                <ListItemButton onClick={()=> navigateTo('/category/men')}  sx={{ display: { xs: '', md: 'none' } }}>
                     <ListItemIcon>
                         <MaleOutlined/>
                     </ListItemIcon>
                     <ListItemText primary={side_menu.categories.men} />
-                </ListItem>
+                </ListItemButton>
 
-                <ListItem onClick={()=> navigateTo('/category/women')} button sx={{ display: { xs: '', md: 'none' } }}>
+                <ListItemButton onClick={()=> navigateTo('/category/women')}  sx={{ display: { xs: '', md: 'none' } }}>
                     <ListItemIcon>
                         <FemaleOutlined/>
                     </ListItemIcon>
                     <ListItemText primary={side_menu.categories.women} />
-                </ListItem>
+                </ListItemButton>
 
-                <ListItem onClick={()=> navigateTo('/category/kid')} button sx={{ display: { xs: '', md: 'none' } }}>
+                <ListItem onClick={()=> navigateTo('/category/kid')}  sx={{ display: { xs: '', md: 'none' } }}>
                     <ListItemIcon>
                         <EscalatorWarningOutlined/>
                     </ListItemIcon>
@@ -111,20 +111,24 @@ export const SideMenu = () => {
 
                { 
                 !isLoggedIn &&
-                    <>
-                        <ListItem button onClick={() => navigateTo(`/auth/login?page=${ router.asPath }`)}>
+                    <>  
+
+                        {/* Login */}
+                        <ListItemButton  onClick={() => navigateTo(`/auth/login?page=${ router.asPath }`)}>
                             <ListItemIcon>
                                 <Login/>
                             </ListItemIcon>
                             <ListItemText primary={side_menu.account.login} />
-                        </ListItem>
+                        </ListItemButton> 
 
-                        <ListItem button onClick={() => navigateTo(`/auth/register?page=${ router.asPath }`)}>
+
+                        {/* Register */}
+                        <ListItemButton  onClick={() => navigateTo(`/auth/register?page=${ router.asPath }`)}>
                             <ListItemIcon>
                                 <VpnKeyOutlined/>
                             </ListItemIcon>
                             <ListItemText primary={side_menu.account.register} />
-                        </ListItem>
+                        </ListItemButton>
 
                     </>
                 }
@@ -134,28 +138,28 @@ export const SideMenu = () => {
                 isLoggedIn &&
                 <>
                     {/* Perfil */}
-                    <ListItem button>
+                    <ListItemButton >
                         <ListItemIcon>
                             <AccountCircleOutlined/>
                         </ListItemIcon>
                         <ListItemText primary={side_menu.account.profile} />
-                    </ListItem>
+                    </ListItemButton>
 
                     {/* Ordenes */}
-                    <ListItem button onClick={() => navigateTo('/orders/history')}>
+                    <ListItemButton onClick={() => navigateTo('/orders/history')}>
                         <ListItemIcon>
                             <ConfirmationNumberOutlined/>
                         </ListItemIcon>
                         <ListItemText primary={side_menu.account.orders} />
-                    </ListItem>
+                    </ListItemButton>
 
                     {/* Salir */}
-                        <ListItem button onClick={ logOut }>
+                        <ListItemButton onClick={ logOut }>
                             <ListItemIcon>
                                 <LoginOutlined/>
                             </ListItemIcon>
                             <ListItemText primary={side_menu.account.logout} />
-                        </ListItem>
+                        </ListItemButton>
                 </>
                 }
 
@@ -168,7 +172,7 @@ export const SideMenu = () => {
 
                 <ListSubheader>Idioma</ListSubheader>
                 
-                <ListItem button>
+                <ListItem >
                     <ChangeLanguage />
                 </ListItem>
             </List>

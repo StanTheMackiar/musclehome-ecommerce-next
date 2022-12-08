@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { useForm } from "react-hook-form";
 
-import { signIn } from "next-auth/react";
+import { getProviders, signIn } from "next-auth/react";
 
 
 type FormData = {
@@ -18,8 +18,15 @@ export const useLogin = () => {
    const [ showError, setShowError ] = useState(false);
    const [ isLoading, setIsLoading ] = useState(false);
    const { register, setFocus, reset, handleSubmit, formState: { errors } } = useForm<FormData>();
+   const [providers, setProviders] = useState<any>({});
 
    const destination = router.query.page?.toString() || '/';
+
+   useEffect(() => {
+      getProviders().then( prov => {
+         setProviders(prov)
+      })
+   }, []);
 
    const onLoginUser = async( { email, password }: FormData ) => {   
 

@@ -13,7 +13,6 @@ import { CartContext } from '../../context/';
 const SummaryPage: NextPage = () => {
 
     const { shippingAdress: address, summary: { numberOfItems } } = useContext(CartContext)
-    
 
 
    return (
