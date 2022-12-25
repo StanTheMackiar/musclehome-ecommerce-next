@@ -6,13 +6,13 @@ import { FC } from 'react'
 
 interface Props {
     currentValue: number,
-    maxValue: number,
+    maxValue?: number,
     updatedQuantity: (quantity: number) => void
 
 }
 
 
-export const ItemCounter:FC<Props> = ({ currentValue, maxValue, updatedQuantity }) => {
+export const ItemCounter:FC<Props> = ({ currentValue, maxValue = 10, updatedQuantity }) => {
 
    const increaseBy = (value: number) => {
 

@@ -1,22 +1,41 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { NextPage } from 'next'
 import Link from 'next/link'
 
 import { CheckOutlined } from '@mui/icons-material'
-import { Typography, Grid, Card, CardContent, Divider, Box, Button } from '@mui/material'
+import { Typography, Grid, Card, CardContent, Divider, Box, Button, CircularProgress } from '@mui/material'
 
 import { CartList, OrderSummary } from '../../components/cart'
 import { ShopLayout } from '../../components/layouts'
 import { CartContext } from '../../context/';
+import { useRouter } from 'next/router';
 
 
 const SummaryPage: NextPage = () => {
 
+    
     const { shippingAddress: address, summary, createOrder } = useContext(CartContext)
     const { numberOfItems } = summary
+    
+    const [isPosting, setIsPosting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    
+    const router = useRouter();
 
-    const onCreateOrder = () => {
-        createOrder();
+    const onCreateOrder = async() => {
+        setIsPosting(true)
+
+        const { hasError, message } = await createOrder();
+
+        if( hasError ) {
+            setIsPosting(false);
+            setErrorMessage( message );
+            return
+        }
+        
+        //? En este punto, message seria el orderID
+        router.replace(`/orders/${ message }`)
+
     }
 
    return (
@@ -67,15 +86,30 @@ const SummaryPage: NextPage = () => {
                         </Link>
                     </Box>
 
-                    <Box sx={{ mt: 2 }}>
+                    <Box sx={{ mt: 2 }} display='flex' flexDirection='column' >
                         <Button 
                             color='secondary' className='circular-btn' 
                             fullWidth
-                            endIcon={ <CheckOutlined /> }
                             onClick={ onCreateOrder }
+                            disabled={ !address || isPosting }
+                            endIcon={
+                                isPosting
+                                ? <CircularProgress color='inherit' size={ 17 } />
+                                : <CheckOutlined />
+                             }
                         >
                             Generar orden
                         </Button>
+                        <Typography 
+                            display={ errorMessage ? 'block' : 'none' }
+                            marginTop={1} 
+                            textAlign='center' 
+                            color='error' 
+                            variant='caption'
+                            className='fadeIn'
+                        >
+                            { errorMessage }
+                        </Typography>
 
                     </Box>
 

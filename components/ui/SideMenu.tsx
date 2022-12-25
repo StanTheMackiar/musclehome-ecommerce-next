@@ -17,7 +17,7 @@ export const SideMenu = () => {
 
     const { isLoggedIn, logOut, user } = useContext(AuthContext)
     const { lang } = useContext(LangContext);
-    const { ui: {shop_layout: {side_menu}} } = lang;
+    const { side_menu } = lang?.ui.shop_layout || {};
     
     const { isMenuOpen, toggleSideMenu } = useContext(UIContext);
     const [searchTerm, setSearchTerm] = useState('');

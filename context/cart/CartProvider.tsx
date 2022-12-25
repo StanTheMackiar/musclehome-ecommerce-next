@@ -5,6 +5,7 @@ import { CartContext,  cartReducer } from './';
 import { ICartProduct, ICartSummary, IShippingAddress } from '../../interfaces';
 import { shopApi } from '../../api';
 import { IOrder } from '../../interfaces/order';
+import axios from 'axios';
 
 export interface CartState {
     cart: ICartProduct[],
@@ -109,13 +110,14 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         dispatch({ type: 'Cart - Update shipping address', payload: address})
     }
 
-    const createOrder = async() => {
+    const createOrder = async(): Promise<{ hasError: boolean, message: string }> => {
 
         try {
+
             if ( !state.shippingAddress ) {
                 throw new Error ('No hay direcion de entrega')
             }
-            
+
             const body: IOrder = {
                 orderItems: state.cart.map(productInCart => {
                     const { inStock, ...rest } = productInCart
@@ -124,17 +126,32 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
                         size: productInCart.size!
                     }
                 }),
-                shippingAddress: state.shippingAddress,
+                shippingAddress: state.shippingAddress!,
                 cartSummary: state.summary,
                 isPaid: false,
             }
-            
-            const { data } = await shopApi.post('/orders', body)
 
-            console.log({data})
+            const { data } = await shopApi.post<IOrder>('/orders', body)
+            
+            dispatch({ type: 'Cart - Order Complete' })
+
+            return {
+                hasError: false,
+                message: data._id!
+            }
 
         } catch (err) {
-            console.log(err)
+            if( axios.isAxiosError(err) ) {
+                return {
+                    hasError: true,
+                    message: err.response?.data.message
+                }
+            }
+
+            return {
+                hasError: true,
+                message: 'Error no controlado, hable con el administrador'
+            }
         }
     }
 

@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 
 const CartPage: NextPage = () => {
 
-  const { isCookiesLoaded, summary: { numberOfItems } } = useContext( CartContext )
+  const { isCookiesLoaded, summary: { numberOfItems = 0 } } = useContext( CartContext )
 
 
   if ( isCookiesLoaded && numberOfItems > 0 ) {

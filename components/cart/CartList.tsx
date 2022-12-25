@@ -10,9 +10,10 @@ import { ICartProduct } from "../../interfaces";
 
 interface Props {
   editable?: boolean;
+  productsInOrder?: unknown;
 }
 
-export const CartList: FC<Props> = ({ editable = false }) => {
+export const CartList: FC<Props> = ({ editable = false, productsInOrder }) => {
   
   const { cart: productsInCart, updateCartQuantity, removeCartProduct } = useContext(CartContext);
 
@@ -22,9 +23,12 @@ export const CartList: FC<Props> = ({ editable = false }) => {
     updateCartQuantity(product);
   };
 
+  const productsToShow = productsInOrder ? productsInOrder as ICartProduct[] : productsInCart;
+
+
   return (
     <>
-      {productsInCart.map((product) => (
+      {productsToShow.map((product) => (
         <Grid
           container
           spacing={2}
@@ -53,12 +57,12 @@ export const CartList: FC<Props> = ({ editable = false }) => {
 
               <Box display="flex" flexDirection="row">
 
-                {editable ? (
+                {editable && !productsInOrder ? (
                   <ItemCounter
-                    currentValue={product.quantity}
-                    maxValue={product.inStock}
+                    currentValue={ product.quantity }
+                    maxValue={ product.inStock }
                     updatedQuantity={(newValue) =>
-                      onNewCartQuantityValue(product, newValue)
+                      onNewCartQuantityValue(product as ICartProduct, newValue)
                     }
                   />
                 ) : (
@@ -72,7 +76,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                 )}
 
                 {editable && (
-                  <IconButton sx={{ ml: 2 }} onClick={()=> removeCartProduct( product )}>
+                  <IconButton sx={{ ml: 2 }} onClick={()=> removeCartProduct( product as ICartProduct )}>
                     <DeleteOutlined />
                   </IconButton>
                 )}
