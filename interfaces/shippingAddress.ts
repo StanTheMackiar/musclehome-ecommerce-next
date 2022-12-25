@@ -1,5 +1,5 @@
 
-export interface IShippingAdress {
+export interface IShippingAddress {
     address  : string,
     address2?: string,
     city     : string,

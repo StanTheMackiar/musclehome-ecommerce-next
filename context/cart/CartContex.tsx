@@ -1,18 +1,20 @@
 import { createContext } from 'react';
-import { ICartProduct, ICartSummary, IShippingAdress } from '../../interfaces';
+import { ICartProduct, ICartSummary, IShippingAddress } from '../../interfaces';
 
 
 
 interface ContextProps {
     cart: ICartProduct[],
     isCookiesLoaded: boolean,
-    shippingAdress?: IShippingAdress,
+    shippingAddress?: IShippingAddress,
     summary: ICartSummary,
 
     addProductToCart: (product: ICartProduct) => void,
     removeCartProduct: (product: ICartProduct) => void,
     updateCartQuantity: (product: ICartProduct) => void,
-    updateShippingAdress: (address: IShippingAdress) => void,
+    updateShippingAddress: (address: IShippingAddress) => void,
+
+    createOrder: () => Promise<void>,
 }
 
 

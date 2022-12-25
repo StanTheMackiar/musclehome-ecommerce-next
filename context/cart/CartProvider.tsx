@@ -2,12 +2,14 @@ import { FC, PropsWithChildren, useEffect, useReducer, useRef } from 'react'
 import Cookies from 'js-cookie'
 
 import { CartContext,  cartReducer } from './';
-import { ICartProduct, ICartSummary, IShippingAdress } from '../../interfaces';
+import { ICartProduct, ICartSummary, IShippingAddress } from '../../interfaces';
+import { shopApi } from '../../api';
+import { IOrder } from '../../interfaces/order';
 
 export interface CartState {
     cart: ICartProduct[],
     isCookiesLoaded: boolean,
-    shippingAdress?: IShippingAdress
+    shippingAddress?: IShippingAddress
     summary: ICartSummary,
 }
 
@@ -15,7 +17,7 @@ export interface CartState {
 const CART_INITIAL_STATE: CartState = {
     cart: [],
     isCookiesLoaded: false,
-    shippingAdress: undefined,
+    shippingAddress: undefined,
     summary: {
         numberOfItems: 0,
         subtotal: 0,
@@ -29,7 +31,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
    const [state, dispatch] = useReducer( cartReducer, CART_INITIAL_STATE )
 
-   let firstRender = useRef(true);
+   const firstRender = useRef(true);
 
 
    useEffect(()=> {
@@ -38,7 +40,7 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
    }, [])
 
    useEffect(() => {
-        const address: IShippingAdress = Cookies.get('address') ? JSON.parse(Cookies.get('address')!) : undefined;
+        const address: IShippingAddress = Cookies.get('address') ? JSON.parse(Cookies.get('address')!) : undefined;
         dispatch({type: 'Cart - LoadAddress from Cookies', payload: address})
    }, []);
 
@@ -102,10 +104,40 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
         dispatch({ type: 'Cart - Remove product in cart', payload: product })
     }
 
-    const updateShippingAdress = ( address: IShippingAdress ) => {
+    const updateShippingAddress = ( address: IShippingAddress ) => {
         Cookies.set('address', JSON.stringify(address));
-        dispatch({ type: 'Cart - Update shipping adress', payload: address})
+        dispatch({ type: 'Cart - Update shipping address', payload: address})
     }
+
+    const createOrder = async() => {
+
+        try {
+            if ( !state.shippingAddress ) {
+                throw new Error ('No hay direcion de entrega')
+            }
+            
+            const body: IOrder = {
+                orderItems: state.cart.map(productInCart => {
+                    const { inStock, ...rest } = productInCart
+                    return { 
+                        ...rest,
+                        size: productInCart.size!
+                    }
+                }),
+                shippingAddress: state.shippingAddress,
+                cartSummary: state.summary,
+                isPaid: false,
+            }
+            
+            const { data } = await shopApi.post('/orders', body)
+
+            console.log({data})
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
         
    return (
        <CartContext.Provider value={{
@@ -114,7 +146,9 @@ export const CartProvider: FC<PropsWithChildren> = ({ children }) => {
          addProductToCart,
          removeCartProduct,
          updateCartQuantity,
-         updateShippingAdress,
+         updateShippingAddress,
+
+         createOrder,
          
        }}>
           { children }

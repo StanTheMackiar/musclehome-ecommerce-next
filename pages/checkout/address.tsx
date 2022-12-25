@@ -9,32 +9,32 @@ import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from 
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { useCountries } from '../../hooks/useCountries';
 import { validations } from '../../utils';
-import { IShippingAdress } from '../../interfaces';
+import { IShippingAddress } from '../../interfaces';
 import { CartContext } from '../../context/';
 
 
 
-const getAddressFromCookies = (): IShippingAdress => {
-    const address: IShippingAdress = Cookies.get('address') ? JSON.parse(Cookies.get('address')!) : {}
+const getAddressFromCookies = (): IShippingAddress => {
+    const address: IShippingAddress = Cookies.get('address') ? JSON.parse(Cookies.get('address')!) : {}
     return address
 }
 
 
-const AdressPage: NextPage = () => {
+const AddressPage: NextPage = () => {
 
     const router = useRouter();
 
 
-    const { updateShippingAdress } = useContext(CartContext)
+    const { updateShippingAddress } = useContext(CartContext)
     const { countries, isLoading } = useCountries();
     
-    const { register, handleSubmit, getValues, formState: { errors } } = useForm<IShippingAdress>({
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<IShippingAddress>({
         defaultValues: getAddressFromCookies(),
     });
 
 
-    const onAdressSubmit = (form: IShippingAdress) => {
-        updateShippingAdress( form )
+    const onAddressSubmit = (form: IShippingAddress) => {
+        updateShippingAddress( form )
         router.push('/checkout/summary')
     }
 
@@ -43,7 +43,7 @@ const AdressPage: NextPage = () => {
       <ShopLayout title='Dirección de facturación' description='Confirmar dirección de envío'>
          <Typography variant='h1' component='h1'>Dirección de facturación</Typography>
          
-         <form onSubmit={ handleSubmit( onAdressSubmit )}>
+         <form onSubmit={ handleSubmit( onAddressSubmit )}>
             <Grid  marginTop={1} container spacing={ 2 } >
 
                 <Grid item xs={12} md={6}>
@@ -195,4 +195,4 @@ const AdressPage: NextPage = () => {
 }
 
 
-export default AdressPage
+export default AddressPage

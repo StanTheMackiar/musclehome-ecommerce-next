@@ -6,5 +6,6 @@ export * from './products'
 export * from './cart'
 export * from './user'
 export * from './country'
-export * from './shippingAdress'
+export * from './shippingAddress'
+export * from './order'
 

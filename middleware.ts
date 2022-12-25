@@ -3,14 +3,14 @@ import { NextFetchEvent, NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 import { ICartProduct } from './interfaces';
-import { IShippingAdress } from './interfaces/shippingAdress';
+import { IShippingAddress } from './interfaces/shippingAddress';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(req: NextRequest, ev: NextFetchEvent ) {
 
   // Leyendo las cookies
   const cart: ICartProduct[] = req.cookies.get('cart') && JSON.parse(req.cookies.get('cart')?.value as string) || [];
-  const address: IShippingAdress = req.cookies.get('address') && JSON.parse(req.cookies.get('address')?.value as string);
+  const address: IShippingAddress = req.cookies.get('address') && JSON.parse(req.cookies.get('address')?.value as string);
 
   console.log({address})
 

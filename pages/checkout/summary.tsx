@@ -12,8 +12,12 @@ import { CartContext } from '../../context/';
 
 const SummaryPage: NextPage = () => {
 
-    const { shippingAdress: address, summary: { numberOfItems } } = useContext(CartContext)
+    const { shippingAddress: address, summary, createOrder } = useContext(CartContext)
+    const { numberOfItems } = summary
 
+    const onCreateOrder = () => {
+        createOrder();
+    }
 
    return (
     <ShopLayout title='Resumen de la orden' description='Resumen de la orden'>
@@ -67,9 +71,10 @@ const SummaryPage: NextPage = () => {
                         <Button 
                             color='secondary' className='circular-btn' 
                             fullWidth
-                            endIcon={<CheckOutlined />}
+                            endIcon={ <CheckOutlined /> }
+                            onClick={ onCreateOrder }
                         >
-                            Finalizar compra
+                            Generar orden
                         </Button>
 
                     </Box>
