@@ -5,7 +5,7 @@ import { IOrder } from '../interfaces';
 const orderSchema = new Schema({
 
     // User es de tipo ID, debe hacer match con un usario y es requerido
-    user: { type: Schema.Types.ObjectId, ref: '', required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     orderItems: [{
         _id     : { type: Schema.Types.ObjectId, ref: 'Product', required: true },
         image   : { type: String, required: true },
@@ -36,6 +36,8 @@ const orderSchema = new Schema({
 
     isPaid: { type: Boolean, required: true, default: false },
     paiAt:  { type: String },
+
+    transactionId: { type: String },
 
 }, {
     timestamps: true,

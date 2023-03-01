@@ -32,7 +32,7 @@ export const SideMenu = () => {
 
     }
 
-    const navigateTo = ( url:string ) => {
+    const navigateTo = ( url: string ) => {
         router.push(url)
         toggleSideMenu();
     }
@@ -165,7 +165,7 @@ export const SideMenu = () => {
 
                 
                 {/* Admin */}
-                { user?.role === 'admin' && <AdminPanel /> }
+                { user?.role === 'admin' && <AdminPanel navigateTo={navigateTo}/> }
 
 
                 <Divider />

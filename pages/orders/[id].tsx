@@ -1,7 +1,7 @@
 import { NextPage, GetServerSideProps } from "next";
-import Link from "next/link";
 
-import { Typography, Grid, Card, CardContent, Divider, Box, Chip, Button } from "@mui/material";
+import { Typography, Grid, Card, CardContent, Divider, Box, Chip, CircularProgress } from "@mui/material";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 import { CreditScoreOutlined, CreditCardOffOutlined  } from "@mui/icons-material";
 import { CartList, OrderSummary } from "../../components/cart";
 
@@ -9,9 +9,22 @@ import { ShopLayout } from "../../components/layouts";
 import { dbOrders } from "../../database";
 import { getSession } from 'next-auth/react';
 import { IOrder } from "../../interfaces";
+import { shopApi } from "../../api";
+import { useRouter } from 'next/router';
+import { useState } from "react";
 
 interface Props {
   order: IOrder,
+}
+
+interface OrdenResponseBody {
+  id: string,
+  status:
+  | "COMPLETED"
+  | "SAVED"
+  | "APPROVED"
+  | "VOIDED"
+  | "PAYER_ACTION_REQUIRED";
 }
 
 const OrderPage: NextPage<Props> = ({ order }) => {
@@ -19,6 +32,34 @@ const OrderPage: NextPage<Props> = ({ order }) => {
   const { cartSummary, isPaid, orderItems, shippingAddress, _id } = order;
   const { numberOfItems } = cartSummary
   const { address, city, country, lastname, name, phone, zip, address2 } = shippingAddress;
+
+  const [ isPaying, setIsPaying ] = useState(false);
+
+  const router = useRouter();
+
+  const onOrderCompleted = async (details: OrdenResponseBody ) => {
+    
+    if ( details.status !== 'COMPLETED' )  {
+      return alert('No hay pago en PayPal')
+    }
+
+    setIsPaying(true);
+
+    try {
+      await shopApi.post(`/orders/pay`, {
+        transaction_id: details.id,
+        order_id: order._id
+      });
+
+      router.reload();
+
+    } catch (error) {
+        setIsPaying(false);
+        console.log({error})
+        alert('Error')
+    }
+
+  }
 
   return (
     <ShopLayout
@@ -29,7 +70,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
         Orden N°: { _id }
       </Typography>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={2} className='fadeIn'>
         <Grid item xs={12} md={7}>
           <CartList productsInOrder={ orderItems as unknown }/>
         </Grid>
@@ -49,39 +90,64 @@ const OrderPage: NextPage<Props> = ({ order }) => {
 
               <Divider sx={{ my: 1 }} />
 
-              <OrderSummary />
+              <OrderSummary cartSummary={cartSummary}/>
 
               <Box sx={{ mt: 3 }} display='flex' flexDirection='column' >
+
                 {
-                  isPaid 
+                  isPaying
                   ? (
-                      <Chip
-                        sx={{ my: 1 }}
-                        label="Pago realizado"
-                        variant="outlined"
-                        color="success"
-                        icon={<CreditScoreOutlined />}
-                      />
-                    ) 
-                  : (
-                    <>
-                      <Chip
-                        sx={{ my: 1 }}
-                        label="Pendiente de pago"
-                        variant="outlined"
-                        color="error"
-                        icon={<CreditCardOffOutlined />}
-                      />
-                      <Button 
-                        variant="contained" 
-                        color="secondary" 
-                        className="circular-btn"
+                      <Box 
+                        display='flex' 
+                        justifyContent='center' 
+                        className="fadeIn"
                       >
-                        Pagar
-                      </Button>
-                    </>
+                        <CircularProgress />
+                      </Box>
                     )
-                }      
+                  : (
+                    isPaid 
+                    ? (
+                        <Chip
+                          sx={{ my: 1 }}
+                          label="Pago realizado"
+                          variant="outlined"
+                          color="success"
+                          icon={<CreditScoreOutlined />}
+                        />
+                      ) 
+                    : (
+                      <>
+                        <Chip
+                          sx={{ my: 1 }}
+                          label="Pendiente de pago"
+                          variant="outlined"
+                          color="error"
+                          icon={<CreditCardOffOutlined />}
+                        />
+                        <PayPalButtons 
+                          createOrder={(data, actions) => {
+                            return actions.order.create({
+                                purchase_units: [
+                                    {
+                                      amount: {
+                                          value: String(order.cartSummary.total),
+                                      },
+                                    },
+                                ],
+                            });
+                          }}
+                          onApprove={(data, actions) => {
+                              return actions.order!.capture().then((details) => {
+                                  onOrderCompleted(details)
+                              });
+                          }}
+                        />
+                      </>
+                      )
+                    )
+                }
+                
               </Box>
             </CardContent>
           </Card>

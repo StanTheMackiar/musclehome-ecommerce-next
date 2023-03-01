@@ -11,6 +11,7 @@
             "admin": {
               "subheader": "Admin Panel",
               "products": "Products",
+              "dashboard": "Dashboard",
               "orders": "Orders", 
               "users": "Users"
             },

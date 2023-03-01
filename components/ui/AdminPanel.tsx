@@ -1,5 +1,6 @@
 import { FC, useContext } from "react";
 import { LangContext } from "../../context/lang/LangContext";
+import { DashboardOutlined } from '@mui/icons-material';
 import {
   ListSubheader,
   Divider,
@@ -14,7 +15,12 @@ import {
   ConfirmationNumberOutlined,
 } from "@mui/icons-material";
 
-export const AdminPanel: FC = () => {
+
+interface Props {
+  navigateTo: (url: string) => void;
+}
+
+export const AdminPanel: FC<Props> = ({ navigateTo }) => {
 
     const { lang: {ui: {shop_layout: {side_menu}}} } = useContext(LangContext);
 
@@ -24,21 +30,32 @@ export const AdminPanel: FC = () => {
 
       <ListSubheader>{side_menu.admin.subheader}</ListSubheader>
 
-      <ListItemButton>
+      <ListItemButton
+        onClick={() => navigateTo('/admin')}
+      >
+        <ListItemIcon>
+          <DashboardOutlined />
+        </ListItemIcon>
+        <ListItemText primary={side_menu.admin.dashboard} />
+      </ListItemButton>
+
+      <ListItemButton
+        onClick={() => navigateTo('/admin/products')}
+      >
         <ListItemIcon>
           <CategoryOutlined />
         </ListItemIcon>
         <ListItemText primary={side_menu.admin.products} />
       </ListItemButton>
 
-      <ListItemButton>
+      <ListItemButton onClick={() => navigateTo('/admin/orders')}>
         <ListItemIcon>
           <ConfirmationNumberOutlined />
         </ListItemIcon>
         <ListItemText primary={side_menu.admin.orders} />
       </ListItemButton>
       
-      <ListItemButton>
+      <ListItemButton onClick={() => navigateTo('/admin/users')}>
         <ListItemIcon>
           <AdminPanelSettings />
         </ListItemIcon>

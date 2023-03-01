@@ -7,6 +7,7 @@ import { signIn, getSession } from 'next-auth/react';
 import { Box } from '@mui/system';
 import { Grid, TextField, Typography, Button, CircularProgress, Divider } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import GoogleIcon from '@mui/icons-material/Google';
 
 import { AuthLayout } from '../../components/layouts';
 import { validations } from '../../utils';
@@ -103,11 +104,26 @@ const LoginPage: NextPage = () => {
                            size='large'
                            color='primary' 
                            sx={{ mb: 1 }}
-                           className='circular-btn'
+                           className='oauth-btn github-btn'
                            onClick={() => signIn('github')} 
                            startIcon={<GitHubIcon />}
                         >
                            Continuar con GitHub
+                        </Button>
+                  </Grid>
+
+                  <Grid item xs={12} display='flex' flexDirection='column' justifyContent='end'>
+                        <Button 
+                           variant='contained' 
+                           fullWidth 
+                           size='large'
+                           color='error' 
+                           sx={{ mb: 1 }}
+                           className='oauth-btn google-btn'
+                           onClick={() => signIn('google')} 
+                           startIcon={<GoogleIcon />}
+                        >
+                           Continuar con Google
                         </Button>
                   </Grid>
                   

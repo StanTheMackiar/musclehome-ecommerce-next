@@ -4,7 +4,7 @@ import { IUser } from '../interfaces';
 
 const userSchema = new Schema({
 
-    name:     { type: String, required: true },
+    name:     { type: String, required: true  },
     lastname: { type: String, require: true, default: '' },
     email:    { type: String, required: true, unique: true },
     password: { type: String, required: true},
@@ -26,6 +26,6 @@ const userSchema = new Schema({
     timestamps: true,
 });
 
-const User:Model<IUser> = mongoose.models.User || model('User', userSchema);
+const User: Model<IUser> = mongoose.models.User || model('User', userSchema);
 
 export default User;

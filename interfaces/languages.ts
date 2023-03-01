@@ -27,6 +27,7 @@ export interface Categories {
 
 export interface Admin {
   subheader: string
+  dashboard: string
   products: string
   orders: string
   users: string

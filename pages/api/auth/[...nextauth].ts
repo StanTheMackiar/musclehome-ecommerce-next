@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 
 import Credentials from "next-auth/providers/credentials";
 import { dbUsers } from "../../../database";
@@ -29,7 +30,11 @@ export const authOptions: NextAuthOptions = {
         clientId: process.env.GITHUB_ID || '',
         clientSecret: process.env.GITHUB_SECRET || '',
     }),
-    
+
+    GoogleProvider({
+        clientId: process.env.GOOGLE_ID || '',
+        clientSecret: process.env.GOOGLE_SECRET || ''
+    }),
 
   ],
 
@@ -46,8 +51,7 @@ export const authOptions: NextAuthOptions = {
   },
   
   callbacks: {
-    
-
+  
     // Manejando el token, añadiendo las opciones personalizadas
     async jwt({ token, account, user }) {
       // console.log({token, account, user})

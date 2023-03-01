@@ -28,6 +28,21 @@
   background-color: #274494 !important;
 }
 
+.circular-btn {
+  border-radius: 30px;
+}
+
+.oauth-btn {
+  border-radius: 30px;
+}
+
+.github-btn:hover {
+  background-color: #302f2f !important;
+}
+
+.google-btn:hover {
+  background-color: #9c1d1d !important;
+}
 
 .summary-card {
   border: 1px solid rgba(0, 0, 0, 0.1);

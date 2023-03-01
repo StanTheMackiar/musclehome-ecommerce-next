@@ -1,11 +1,20 @@
 import { Grid, Typography } from '@mui/material';
-import { useContext } from 'react';
+import { FC, useContext } from 'react';
 import { CartContext } from '../../context/cart/CartContex';
+import { ICartSummary } from '../../interfaces';
 import { currency } from '../../utils';
 
-export const OrderSummary = () => {
+interface Props {
+    cartSummary?: ICartSummary;
+}
 
-    const { summary: {numberOfItems, subtotal, tax, total} } = useContext( CartContext )
+export const OrderSummary: FC<Props> = ({ cartSummary }) => {
+
+    const { summary: contextSummary } = useContext( CartContext )
+
+    const currentSummary: ICartSummary = cartSummary ? cartSummary : contextSummary
+
+    const { numberOfItems, subtotal, tax, total } = currentSummary;
 
   return (
     <Grid marginTop={2} container rowSpacing={1}>
@@ -17,7 +26,7 @@ export const OrderSummary = () => {
         </Grid>
 
         <Grid item xs={8}>
-            <Typography>Subotal</Typography>
+            <Typography>Subtotal</Typography>
         </Grid>
         <Grid item xs={4} display='flex' justifyContent='end'>
             <Typography>{ currency.format(subtotal) }</Typography>

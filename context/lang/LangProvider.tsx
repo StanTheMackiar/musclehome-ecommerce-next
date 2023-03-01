@@ -9,9 +9,7 @@ export type Lang = 'es' | 'en'
 
 export const LangProvider: FC<PropsWithChildren> = ({ children }) => {
 
-   const router = useRouter();
-
-   const { locale } = router
+   const { locale } = useRouter();
    
    const selectLang: {"es": ILanguage, "en": ILanguage} = {
     "es": es_ES,

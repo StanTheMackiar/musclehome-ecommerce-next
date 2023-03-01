@@ -14,12 +14,13 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent ) {
 
   const previousPage = req.nextUrl.pathname
   const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-
+  console.log({session})
 
   //! Verifiando login en pantallas exclusivas
-  if ( req.nextUrl.pathname.startsWith( '/checkout' ) && !session ) return NextResponse.redirect( new URL(`/auth/login?page=${previousPage}`, req.url))
-
-  if ( req.nextUrl.pathname.startsWith( '/orders' ) && !session ) return NextResponse.redirect( new URL(`/auth/login?page=${previousPage}`, req.url))
+  if ( req.nextUrl.pathname.startsWith( '/checkout' ) && !session ) return NextResponse.redirect( new URL(`/auth/login?page=${previousPage}`, req.url));
+  if ( req.nextUrl.pathname.startsWith( '/admin' ) && !session ) return NextResponse.redirect( new URL(`/auth/login?page=${previousPage}`, req.url));
+  if ( req.nextUrl.pathname.startsWith( '/api/admin' ) && !session ) return NextResponse.redirect( new URL(`/auth/login?page=${previousPage}`, req.url));
+  if ( req.nextUrl.pathname.startsWith( '/orders' ) && !session ) return NextResponse.redirect( new URL(`/auth/login?page=${previousPage}`, req.url));
   
 
 
@@ -31,7 +32,13 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent ) {
 
       return NextResponse.next();
   }
-    
+
+  if (req.nextUrl.pathname.startsWith('/admin') || req.nextUrl.pathname.startsWith('/api/admin')) {
+    const validRoles = ['admin', 'super-user']
+    //@ts-ignore
+    if ( !validRoles.includes( session.user.role ) ) return NextResponse.redirect( new URL('/', req.url) )
+  }
+
   return NextResponse.next();
 
 }
@@ -40,6 +47,8 @@ export const config = {
   matcher: [
     '/checkout/:path*',
     '/orders/:path*',
-    '/profile/:path*'
+    '/profile/:path*',
+    '/admin/:path*',
+    '/api/admin/:path*',
   ]
 }

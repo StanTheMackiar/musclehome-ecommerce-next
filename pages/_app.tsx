@@ -6,6 +6,8 @@ import { LangProvider } from '../context/lang';
 import { SWRConfig } from 'swr';
 import { AuthProvider, CartProvider, UIProvider } from '../context';
 import { SessionProvider } from 'next-auth/react';
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { SnackbarProvider } from 'notistack'
 
 export default function App({ Component, pageProps: { session, ...pageProps} }: AppProps) {
 
@@ -16,19 +18,24 @@ export default function App({ Component, pageProps: { session, ...pageProps} }: 
           fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
       }}
       >
-        <AuthProvider>
-          <LangProvider>
-            <CartProvider>
-              <UIProvider>
-                <ThemeProvider theme={lightTheme}>
-                  <CssBaseline />
-                  <Component {...pageProps} />
-                </ThemeProvider>
-              </UIProvider>
-            </CartProvider>
-          </LangProvider>
-        </AuthProvider>
+        <SnackbarProvider maxSnack={3}>
+          <PayPalScriptProvider options={{"client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '' }}>
+            <AuthProvider>
+              <LangProvider>
+                <CartProvider>
+                  <UIProvider>
+                    <ThemeProvider theme={lightTheme}>
+                      <CssBaseline />
+                      <Component {...pageProps} />
+                    </ThemeProvider>
+                  </UIProvider>
+                </CartProvider>
+              </LangProvider>
+            </AuthProvider>
+          </PayPalScriptProvider>
+        </SnackbarProvider>
       </SWRConfig>
     </SessionProvider>
+    
   )
 }
