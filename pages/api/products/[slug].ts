@@ -34,6 +34,10 @@ const getProductBySlug = async(req: NextApiRequest, res: NextApiResponse<Data>) 
             message: 'Product do not exist'
         })
     }
+
+    product.images = product.images.map(image => {
+      return image.includes('http') ? image : `${process.env.HOST_NAME}/products/${ image }`
+    });
     
     return res.status(200).json( product )
 

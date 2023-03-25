@@ -12,7 +12,7 @@ const orderSchema = new Schema({
         gender  : { type: String, required: true },
         price   : { type: Number, required: true },
         quantity: { type: Number, required: true },
-        size    : { type: String, required: true },
+        size    : { type: String, default: '' },
         slug    : { type: String, required: true },
         title   : { type: String, required: true },
     }],

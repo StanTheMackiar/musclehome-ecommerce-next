@@ -34,8 +34,8 @@ export const useAddToCart = ({ product }: AddToCartProps) => {
     }
 
     const onAddProduct = () => {
-    
-        if ( !tempCartProduct.size ) return;
+      
+        if ( (product.sizes.length > 0) && !tempCartProduct.size ) return;
 
         addProductToCart(tempCartProduct);
         router.push('/cart');

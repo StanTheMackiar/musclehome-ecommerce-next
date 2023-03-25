@@ -1,5 +1,5 @@
 
-import { FC, CSSProperties } from 'react';
+import { FC } from 'react';
 import { Slide } from 'react-slideshow-image';
 
 import 'react-slideshow-image/dist/styles.css'
@@ -21,11 +21,10 @@ export const ProductSlideShow:FC<Props> = ({ images, height }) => {
     >
         {
             images.map( image => {
-                const url = `/products/${image}`;
                 return (
                     <div key={ image } className={styles['each-slide']}>
                         <div style={{
-                            backgroundImage: `url(${url})`,
+                            backgroundImage: `url(${image})`,
                             backgroundSize: 'cover'
                         }}>
 

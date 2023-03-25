@@ -3,6 +3,9 @@ import { IProduct } from '../../../interfaces/products';
 import { db } from '../../../database';
 import Product from '../../../models/Product';
 import { isValidObjectId } from 'mongoose';
+import { v2 as cloudinary } from 'cloudinary'
+
+cloudinary.config( process.env.CLOUDINARY_URL || '' );
 
 type Data = 
 | { message: string }
@@ -33,7 +36,14 @@ const getProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   await db.disconnect();
 
-  res.status(200).send( products )
+  const updatedProducts = products.map(product => {
+    product.images = product.images.map(image => {
+      return image.includes('http') ? image : `${process.env.HOST_NAME}/products/${ image }`
+    })
+    return product;
+  })
+
+  res.status(200).send( updatedProducts )
 }
 
 const updateProduct = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
@@ -51,6 +61,16 @@ const updateProduct = async(req: NextApiRequest, res: NextApiResponse<Data>) => 
       await db.disconnect();
       return res.status(404).json({ message: 'No existe un producto con ese id'});
     }
+
+    //https://res.cloudinary.com/dhnh6pngl/image/upload/v1679719943/rmdbheivyb6v3lhtiolx.jpg
+
+    product.images.forEach( async(image) => {
+      if( !images.includes(image) ){
+        const [ fileId, extension ] = image.substring( image.lastIndexOf('/') + 1).split('.');
+        console.log({image, fileId, extension})
+        await cloudinary.uploader.destroy(fileId);
+      }
+    })
 
     await product.update( req.body );
     await db.disconnect();

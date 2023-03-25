@@ -17,6 +17,7 @@ export const AddToCart: FC<Props> = ({ product }) => {
 
   const { tempCartProduct, onAddProduct, onSelectedSize, onUpdatedQuantity } = useAddToCart({ product })
    
+  const hasSizes = product.sizes.length > 0
 
   return (
     <>
@@ -57,10 +58,10 @@ export const AddToCart: FC<Props> = ({ product }) => {
           className="circular-btn"
           fullWidth
           onClick={onAddProduct}
-          disabled={!tempCartProduct.size}
+          disabled={hasSizes && !tempCartProduct.size}
           endIcon={<AddShoppingCartOutlined />}
         >
-          {tempCartProduct.size ? "Agregar al carrito" : "Seleccione una talla"}
+          {hasSizes && !tempCartProduct.size ?  "Seleccione una talla" : "Agregar al carrito" }
         </Button>
       ) : (
         <Button

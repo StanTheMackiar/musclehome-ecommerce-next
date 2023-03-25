@@ -56,6 +56,7 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { enqueueSnackbar } = useSnackbar();
   const [ tag, setTag ] = useState('');
+  const [ isSubmittingFile, setIsSubmittingFile ] = useState(false);
 
   const { register, getValues, setValue, reset, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm<FormData>({
     defaultValues: initialValues
@@ -124,7 +125,7 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
 
   const onFilesSelected = async({ target }: ChangeEvent<HTMLInputElement>) => {
     if(! target.files || target.files.length === 0) return;
-
+    setIsSubmittingFile(true)
     try {
       
       for ( const file of target.files ) {
@@ -132,12 +133,18 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
         formData.append('file', file)
         const { data } = await shopApi.post<{ message: string}>('/admin/upload', formData);
         console.log({data})
+        setValue('images', [ ...getValues('images'), data.message ], { shouldValidate: true })
       }
       
     } catch (error) {
       console.log({error})
+    } finally {
+      setIsSubmittingFile(false);
     }
+  };
 
+  const onDeleteImage = (image: string) => {
+    setValue('images', getValues('images').filter(img => img !== image), { shouldValidate: true })
   }
 
   const onSubmit = async( form: FormData ) => {
@@ -171,6 +178,7 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
       enqueueSnackbar(form._id ? 'No se pudo actualizar el producto' : 'No se pudo crear el producto', { variant: 'error' })
     }
   }
+
 
 
     return (
@@ -361,15 +369,17 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                         
                         <Box display='flex' flexDirection="column">
                             <FormLabel sx={{ mb:1}}>Imágenes</FormLabel>
-                            <Button
+                            <LoadingButton
+                              loading={isSubmittingFile}
                               color="secondary"
+                              variant='contained'
                               fullWidth
                               startIcon={ <UploadOutlined /> }
                               sx={{ mb: 3 }}
                               onClick={() => fileInputRef.current?.click() }
                             >
                                 Cargar imagen
-                            </Button>
+                            </LoadingButton>
                             <input
                               ref={ fileInputRef } 
                               type='file'
@@ -379,25 +389,19 @@ const ProductAdminPage:FC<Props> = ({ product }) => {
                               onChange={ onFilesSelected }
                             />
 
-                            <Chip 
-                                label="Es necesario al 2 imagenes"
-                                color='error'
-                                variant='outlined'
-                            />
-
                             <Grid container spacing={2}>
                                 {
-                                    product.images.map( img => (
+                                    getValues('images').map( img => (
                                         <Grid item xs={4} sm={3} key={img}>
                                             <Card>
                                                 <CardMedia 
                                                     component='img'
                                                     className='fadeIn'
-                                                    image={ `/products/${ img }` }
-                                                    alt={ img }
+                                                    image={ img }
+                                                    alt={ `Imagen de ${getValues('title')}` }
                                                 />
                                                 <CardActions>
-                                                    <Button fullWidth color="error">
+                                                    <Button onClick={() => onDeleteImage(img)} fullWidth color="error">
                                                         Borrar
                                                     </Button>
                                                 </CardActions>
@@ -431,7 +435,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
       const tempProduct = JSON.parse( JSON.stringify( new Product() ))
       delete tempProduct._id;
-      tempProduct.images = ['img1.jpg', 'img2.jpg'];
       product = tempProduct;
 
     } else {
