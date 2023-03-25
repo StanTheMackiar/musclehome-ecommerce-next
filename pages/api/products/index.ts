@@ -2,10 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { db, SHOP_CONSTANS } from '../../../database';
 import { Product } from '../../../models';
 import { IProduct } from '../../../interfaces/products';
+import { isValidObjectId } from 'mongoose';
 
 type Data = 
   | { message: string }
   | IProduct[]
+
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     
@@ -39,3 +41,5 @@ const getProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     return res.status(200).json( products );
 }
+
+

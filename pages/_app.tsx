@@ -18,7 +18,7 @@ export default function App({ Component, pageProps: { session, ...pageProps} }: 
           fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
       }}
       >
-        <SnackbarProvider maxSnack={3}>
+        <SnackbarProvider  variant='success' maxSnack={3} anchorOrigin={{ horizontal: 'right', vertical: 'top' }}>
           <PayPalScriptProvider options={{"client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '' }}>
             <AuthProvider>
               <LangProvider>

@@ -12,8 +12,8 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent ) {
   const cart: ICartProduct[] = req.cookies.get('cart') && JSON.parse(req.cookies.get('cart')?.value as string) || [];
   const address: IShippingAddress = req.cookies.get('address') && JSON.parse(req.cookies.get('address')?.value as string);
 
-  const previousPage = req.nextUrl.pathname
-  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+  const previousPage = req.nextUrl.pathname;
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   console.log({session})
 
   //! Verifiando login en pantallas exclusivas

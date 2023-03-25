@@ -3,17 +3,11 @@ import Product from '../models/Product';
 import { IProduct } from '../interfaces';
 
 export const getProductBySlug = async( slug: string ): Promise<IProduct | null> => {
-
     await db.connect();
     const product = await Product.findOne({ slug }).lean();
-
     await db.disconnect();
 
-    if ( !product ) {
-        return null
-    }
-
-
+    if ( !product )  return null
     return JSON.parse( JSON.stringify( product ))
 }
 
@@ -33,7 +27,7 @@ export const getAllProductSlugs = async(): Promise<ProductSlug[]> => {
 
 // Search
 
-export const getProductsByTerm = async ( term:string ): Promise<IProduct[]> => {
+export const getProductsByTerm = async ( term: string ): Promise<IProduct[]> => {
      
     term = term.toString().toLowerCase();
 
